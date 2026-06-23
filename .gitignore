@@ -1,0 +1,12 @@
+# Claude Code local settings
+.claude/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Temp / lock files
+~$*
+*.tmp
