@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบทดสอบ – จริยธรรมและกฎหมายไซเบอร์</title>
+<style>
+  :root{--bg:#0f172a;--panel:#1e293b;--txt:#e2e8f0;--accent:#38bdf8;--good:#22c55e;--bad:#f87171;--muted:#94a3b8;--line:#334155}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--txt);
+       min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:18px}
+  h1{font-size:20px;margin:4px 0 2px;text-align:center}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:16px;text-align:center}
+  .wrap{width:min(640px,94vw)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+  .row label{font-size:13px;color:var(--muted);min-width:96px}
+  .chip{background:#0b1220;color:var(--txt);border:1px solid var(--line);border-radius:999px;padding:7px 13px;
+        font-size:13px;cursor:pointer;font-family:inherit}
+  .chip.active{background:var(--accent);color:#03263a;border-color:var(--accent);font-weight:700}
+  select{background:#0b1220;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:14px}
+  .start{background:var(--accent);color:#03263a;border:none;border-radius:12px;padding:13px;font-size:16px;font-weight:700;
+        width:100%;cursor:pointer;font-family:inherit;margin-top:6px}
+  .start:hover{filter:brightness(1.07)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:14px;color:var(--muted)}
+  .pbar{height:7px;background:#0b1220;border-radius:99px;overflow:hidden;flex:1;margin:0 12px}
+  .pbar>div{height:100%;background:var(--accent);width:0;transition:.3s}
+  .qnum{color:var(--accent);font-weight:700;font-size:13px;margin-bottom:6px}
+  .qtext{font-size:18px;line-height:1.6;margin-bottom:16px}
+  .qtext strong{color:#fca5a5}
+  .opt{display:flex;gap:10px;align-items:flex-start;background:#0b1220;border:1.5px solid var(--line);border-radius:12px;
+       padding:13px 15px;margin-bottom:10px;cursor:pointer;font-size:15px;line-height:1.5;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt .k{font-weight:700;color:var(--muted);min-width:18px}
+  .opt.correct{border-color:var(--good);background:rgba(34,197,94,.13)}
+  .opt.wrong{border-color:var(--bad);background:rgba(248,113,113,.13)}
+  .opt.correct .k{color:var(--good)} .opt.wrong .k{color:var(--bad)}
+  .opt.disabled{cursor:default}
+  .explain{background:#0b1220;border-left:3px solid var(--accent);border-radius:8px;padding:11px 14px;margin:6px 0 14px;
+           font-size:14px;line-height:1.6;color:#cbd5e1}
+  .explain strong{color:var(--accent)}
+  .next{background:var(--accent);color:#03263a;border:none;border-radius:10px;padding:11px 20px;font-size:15px;font-weight:700;
+        cursor:pointer;font-family:inherit;float:right}
+  .next:hover{filter:brightness(1.07)}
+  .result{text-align:center}
+  .score{font-size:46px;font-weight:800;margin:10px 0}
+  .grade{font-size:16px;margin-bottom:18px}
+  .review-item{text-align:left;background:#0b1220;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:14px;line-height:1.55}
+  .review-item .q{margin-bottom:6px}
+  .review-item .ans{color:var(--bad)} .review-item .cor{color:var(--good)}
+  .clearfix::after{content:'';display:block;clear:both}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <a href="หน้าแรก.html" style="position:fixed;top:12px;left:14px;color:#94a3b8;font-size:13px;text-decoration:none;background:#1e293b;border:1px solid #334155;padding:6px 12px;border-radius:999px;z-index:99">🏠 หน้าแรก</a>
+  <h1>📝 แบบทดสอบ — จริยธรรมและกฎหมายไซเบอร์</h1>
+  <div class="sub">ทำข้อสอบปรนัยจากคลังข้อสอบ มีเฉลย+คำอธิบาย รู้ผลทันที</div>
+
+  <div class="wrap">
+    <!-- หน้าตั้งค่า -->
+    <div class="panel" id="setup">
+      <div class="row">
+        <label>หัวข้อ</label>
+        <div id="topicChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="row">
+        <label>จำนวนข้อ</label>
+        <div id="countChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="row">
+        <label>โหมดเฉลย</label>
+        <select id="mode">
+          <option value="instant">เฉลยทันทีหลังตอบ (เหมาะกับการฝึก)</option>
+          <option value="exam">เฉลยตอนจบ (โหมดสอบ)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label></label>
+        <label style="min-width:auto;color:var(--txt);cursor:pointer"><input type="checkbox" id="shuffleOpt" checked> สลับลำดับตัวเลือก</label>
+      </div>
+      <button class="start" id="startBtn">เริ่มทำข้อสอบ ▶</button>
+    </div>
+
+    <!-- หน้าทำข้อสอบ -->
+    <div class="panel hidden" id="quiz">
+      <div class="topbar">
+        <span id="qcount"></span>
+        <div class="pbar"><div id="qprog"></div></div>
+        <span id="qscore"></span>
+      </div>
+      <div class="qnum" id="qnum"></div>
+      <div class="qtext" id="qtext"></div>
+      <div id="opts"></div>
+      <div class="explain hidden" id="explain"></div>
+      <div class="clearfix"><button class="next hidden" id="nextBtn">ถัดไป →</button></div>
+    </div>
+
+    <!-- หน้าผลคะแนน -->
+    <div class="panel hidden result" id="result">
+      <div class="score" id="scoreNum"></div>
+      <div class="grade" id="grade"></div>
+      <div id="review" style="margin-top:14px"></div>
+      <button class="start" id="againBtn" style="margin-top:16px">ทำใหม่อีกครั้ง ↻</button>
+    </div>
+  </div>
+
+<script>
+const QUIZZES = [{"name":"PDPA","questions":[{"q":"PDPA มีผลบังคับใช้เต็มรูปแบบเมื่อใด","options":["27 พ.ค. 2562","1 ม.ค. 2563","1 มิ.ย. 2565","1 ม.ค. 2565"],"correct":2,"explain":"บังคับใช้เต็มรูปแบบ 1 มิ.ย. 2565 (ประกาศ 2562 แต่เลื่อนบังคับหมวดหลัก)"},{"q":"ข้อใดเป็น \"ข้อมูลส่วนบุคคล\" ตามมาตรา 6","options":["ข้อมูลของบริษัทจำกัด","เลขบัตรประชาชนของผู้เสียชีวิต","หมายเลขโทรศัพท์ของนายสมชาย","ยอดขายรวมของบริษัท"],"correct":2,"explain":"ม.6 = ระบุตัวบุคคลธรรมดาได้; บริษัท/คนตาย/ข้อมูลรวม ไม่ใช่"},{"q":"ผู้ที่มีอำนาจ \"ตัดสินใจ\" เกี่ยวกับการเก็บ/ใช้/เปิดเผยข้อมูล เรียกว่าอะไร","options":["Data Processor","Data Controller","Data Subject","DPO"],"correct":1,"explain":"Data Controller = ผู้ตัดสินใจ; Processor = ทำตามคำสั่ง"},{"q":"PDPA มีฐานการประมวลผลข้อมูลทั่วไปทั้งหมดกี่ฐาน","options":["5","6","7","8"],"correct":2,"explain":"7 ฐาน = Consent (ม.19) + 6 ข้อยกเว้น (ม.24)"},{"q":"การติดตั้งกล้องวงจรปิด (CCTV) เพื่อความปลอดภัยของอาคาร อาศัยฐานใด","options":["ความยินยอม","สัญญา","ประโยชน์โดยชอบด้วยกฎหมาย","ภารกิจรัฐ"],"correct":2,"explain":"CCTV = ฐานประโยชน์โดยชอบด้วยกฎหมาย ม.24(5)"},{"q":"ข้อใด **ไม่ใช่** ข้อมูลส่วนบุคคลอ่อนไหว (Sensitive Data) ตามมาตรา 26","options":["ข้อมูลสุขภาพ","ความคิดเห็นทางการเมือง","เลขที่บัญชีธนาคาร","ข้อมูลพันธุกรรม"],"correct":2,"explain":"เลขบัญชีธนาคารเป็นข้อมูลส่วนบุคคล**ทั่วไป** ไม่ใช่ Sensitive"},{"q":"ผู้ควบคุมข้อมูลต้องแจ้งเหตุการละเมิดข้อมูลส่วนบุคคลต่อสำนักงานฯ ภายในกี่ชั่วโมง","options":["24 ชม.","48 ชม.","72 ชม.","7 วัน"],"correct":2,"explain":"72 ชม. นับแต่ทราบ (ม.37(4))"},{"q":"สิทธิ \"ขอให้ลบหรือทำลายข้อมูล\" (Right to be forgotten) อยู่ในมาตราใด","options":["ม.30","ม.32","ม.33","ม.36"],"correct":2,"explain":"ม.33 = Right to Erasure"},{"q":"มาตรการรักษาความมั่นคงปลอดภัยของข้อมูลต้องครอบคลุม 3 ด้าน ตรงกับข้อใด","options":["Confidentiality, Integrity, Availability","Consent, Integrity, Accountability","Confidentiality, Identity, Access","Control, Integrity, Authorization"],"correct":0,"explain":"CIA Triad"},{"q":"ข้อใดถูกต้องเกี่ยวกับความยินยอม (Consent)","options":["เมื่อให้แล้วถอนไม่ได้","ถอนเมื่อใดก็ได้","ต้องขอหลังเก็บข้อมูลเท่านั้น","ไม่จำเป็นต้องแยกส่วนจากข้อความอื่น"],"correct":1,"explain":"ถอนความยินยอมเมื่อใดก็ได้ (ม.19 ว.5); ต้องขอก่อน/ขณะเก็บ และแยกส่วนชัดเจน"},{"q":"ข้อใด **ไม่** อยู่ภายใต้บังคับ PDPA (ข้อยกเว้น ม.4)","options":["ร้านค้าออนไลน์เก็บข้อมูลลูกค้า","การเก็บภาพครอบครัวไว้ดูเอง","โรงพยาบาลเก็บประวัติคนไข้","บริษัทเก็บข้อมูลพนักงาน"],"correct":1,"explain":"ม.4(1) ใช้เพื่อประโยชน์ส่วนตน/ครอบครัว ได้รับยกเว้น"},{"q":"หน่วยงานกำกับดูแลตาม PDPA คือข้อใด","options":["กสทช.","สคส. (PDPC)","ETDA","สกมช."],"correct":1,"explain":"สคส./PDPC (กสทช.=คลื่นความถี่, ETDA=ธุรกรรมอิเล็กฯ, สกมช.=ไซเบอร์)"},{"q":"ข้อมูลที่ผ่านกระบวนการทำให้ระบุตัวบุคคลไม่ได้อย่างถาวร เรียกว่า","options":["Pseudonymization","Encryption","Anonymization","Tokenization"],"correct":2,"explain":"Anonymization (ถาวร, พ้นจากเป็นข้อมูลส่วนบุคคล)"},{"q":"การโอนข้อมูลส่วนบุคคลไปต่างประเทศ (ม.28) มีหลักการสำคัญคือ","options":["ห้ามโอนทุกกรณี","ประเทศปลายทางต้องมีมาตรฐานคุ้มครองที่เพียงพอ","โอนได้เสรีหากเป็นบริษัทในเครือ","ต้องขออนุญาตศาล"],"correct":1,"explain":"ม.28 — มาตรฐานคุ้มครองเพียงพอ (มีข้อยกเว้นเช่นความยินยอม)"},{"q":"ROPA (มาตรา 39) หมายถึงอะไร","options":["นโยบายความเป็นส่วนตัว","บันทึกรายการกิจกรรมการประมวลผล","คำขอความยินยอม","รายงานการละเมิดข้อมูล"],"correct":1,"explain":"Record of Processing Activities (ม.39)"},{"q":"โทษทางปกครองสูงสุดตาม PDPA คือเท่าใด","options":["1 ล้านบาท","3 ล้านบาท","5 ล้านบาท","10 ล้านบาท"],"correct":2,"explain":"ปกครองสูงสุด 5 ล้านบาท (อาญาสูงสุด 1 ล้าน + จำคุก 1 ปี)"},{"q":"ข้อใดคือ \"เหตุผลเชิงจริยธรรม\" ของหลักจำกัดวัตถุประสงค์ (Purpose Limitation)","options":["ลดต้นทุนการจัดเก็บ","ความไว้วางใจที่ได้รับต้องไม่ถูกนำไปใช้ผิดวัตถุประสงค์","เพิ่มยอดขาย","ทำให้ระบบเร็วขึ้น"],"correct":1,"explain":"จริยธรรม = รักษาความไว้วางใจ ไม่ใช้ข้อมูลผิดวัตถุประสงค์"},{"q":"ผู้ประมวลผลข้อมูล (DP) เมื่อพบเหตุละเมิดข้อมูล ต้องแจ้งต่อใคร","options":["สคส. โดยตรง","ผู้ควบคุมข้อมูล (DC)","เจ้าของข้อมูล","ตำรวจ"],"correct":1,"explain":"DP แจ้งต่อ DC (ม.40); DC ต่างหากที่แจ้ง สคส."},{"q":"ข้อมูลส่วนบุคคลอ่อนไหวตาม ม.26 โดยหลักต้องใช้ฐานใด","options":["ความยินยอมทั่วไป","ความยินยอมโดยชัดแจ้ง","ฐานสัญญา","ไม่ต้องมีฐาน"],"correct":1,"explain":"Sensitive Data ต้องขอ Explicit Consent เว้นแต่ข้อยกเว้น ม.26(1)-(5)"},{"q":"เป้าหมายสูงสุดเชิงจริยธรรมของ PDPA คือข้อใด","options":["เพิ่มรายได้รัฐจากค่าปรับ","สร้างความไว้วางใจ (Trust) ในสังคมดิจิทัล","จำกัดการใช้อินเทอร์เน็ต","ควบคุมสื่อมวลชน"],"correct":1,"explain":"Trust — ถ้าไม่เชื่อมั่น เศรษฐกิจดิจิทัลโตไม่ได้"}]},{"name":"พ.ร.บ.คอม/ไซเบอร์","questions":[{"q":"พ.ร.บ.คอมพิวเตอร์ฉบับแก้ไขเพิ่มเติมประกาศใช้ปีใด","options":["2550","2560","2562","2565"],"correct":1,"explain":""},{"q":"การแฮกเข้าสู่ระบบคอมพิวเตอร์ที่มีมาตรการป้องกันโดยมิชอบ เป็นความผิดตามมาตราใด","options":["ม.5","ม.9","ม.14","ม.16"],"correct":0,"explain":""},{"q":"การโจมตีแบบ DDoS ที่ทำให้ระบบทำงานไม่ปกติ ตรงกับมาตราใด","options":["ม.7","ม.10","ม.13","ม.16"],"correct":1,"explain":""},{"q":"การนำเข้าข้อมูลอันเป็นเท็จที่กระทบความมั่นคงหรือก่อความตื่นตระหนก ตรงกับมาตราใด","options":["ม.8","ม.11","ม.14","ม.17"],"correct":2,"explain":""},{"q":"การโพสต์ภาพตัดต่อทำให้ผู้อื่นเสียชื่อเสียง ตรงกับมาตราใด","options":["ม.12","ม.14","ม.15","ม.16"],"correct":3,"explain":""},{"q":"ผู้ให้บริการ (ตัวกลาง) จะพ้นความรับผิดตาม ม.15 เมื่อใด","options":["ไม่มีทางพ้นผิด","เมื่อได้รับแจ้งเตือนแล้วนำข้อมูลออก","เมื่อจ่ายค่าปรับ","เมื่อปิดเว็บไซต์"],"correct":1,"explain":""},{"q":"ผู้ให้บริการต้องเก็บข้อมูลจราจรคอมพิวเตอร์ (log) อย่างน้อยกี่วัน","options":["30 วัน","60 วัน","90 วัน","180 วัน"],"correct":2,"explain":""},{"q":"การ \"แชร์/ส่งต่อ\" ข้อมูลเท็จตาม ม.14 โดยรู้อยู่แล้ว","options":["ไม่ผิด","ผิดเฉพาะคนโพสต์แรก","มีความผิดด้วย","ผิดเฉพาะผู้ให้บริการ"],"correct":2,"explain":""},{"q":"พ.ร.บ.การรักษาความมั่นคงปลอดภัยไซเบอร์ ประกาศใช้ปีใด","options":["2560","2562","2563","2565"],"correct":1,"explain":""},{"q":"\"CII\" ตาม พ.ร.บ.ไซเบอร์ หมายถึง","options":["ข้อมูลส่วนบุคคล","โครงสร้างพื้นฐานสำคัญทางสารสนเทศ","ลายมือชื่อดิจิทัล","ผู้ให้บริการ"],"correct":1,"explain":""},{"q":"พ.ร.บ.ไซเบอร์แบ่งระดับความรุนแรงของภัยเป็นกี่ระดับ","options":["2","3","4","5"],"correct":1,"explain":""},{"q":"หน่วยงานปฏิบัติหลักตาม พ.ร.บ.ไซเบอร์ คือข้อใด","options":["สคส.","สกมช.","ETDA","กสทช."],"correct":1,"explain":""},{"q":"ข้อใดเป็นตัวอย่างของ CII","options":["ร้านกาแฟ","ระบบไฟฟ้า/การเงิน/สาธารณสุข","บล็อกส่วนตัว","เกมออนไลน์"],"correct":1,"explain":""},{"q":"ความรับผิดของผู้บริหาร (Executive Liability) อยู่ในมาตราใดของ พ.ร.บ.ไซเบอร์","options":["ม.49","ม.60","ม.77","ม.5"],"correct":2,"explain":""},{"q":"\"การกระทำความผิดนอกราชอาณาจักรลงโทษในไทยได้\" อยู่ในมาตราใดของ พ.ร.บ.คอมพิวเตอร์","options":["ม.14","ม.16","ม.17","ม.26"],"correct":2,"explain":""},{"q":"นาย A สัญชาติอเมริกัน อยู่ที่สหรัฐฯ แฮกเข้าระบบธนาคารไทยทำให้คนไทยเสียหาย จะลงโทษนาย A ในไทยตาม ม.17 ได้เมื่อใด","options":["ลงโทษได้ทันทีเพราะเหยื่อเป็นคนไทย","ลงโทษได้เมื่อผู้เสียหาย (คนไทย) ร้องขอให้ลงโทษ","ลงโทษไม่ได้เพราะทำนอกราชอาณาจักร","ลงโทษได้เฉพาะเมื่อสหรัฐฯ ส่งตัวผู้ร้ายข้ามแดน"],"correct":1,"explain":""}]},{"name":"ทรัพย์สินทางปัญญา","questions":[{"q":"ลิขสิทธิ์เกิดขึ้นเมื่อใด","options":["เมื่อจดทะเบียน","เมื่อสร้างสรรค์งานเสร็จ","เมื่อเผยแพร่","เมื่อชำระค่าธรรมเนียม"],"correct":1,"explain":""},{"q":"โปรแกรมคอมพิวเตอร์ได้รับความคุ้มครองในฐานะงานประเภทใด","options":["ศิลปกรรม","วรรณกรรม","สิทธิบัตร","ความลับทางการค้า"],"correct":1,"explain":""},{"q":"อายุการคุ้มครองลิขสิทธิ์โดยทั่วไปคือ","options":["10 ปี","20 ปี","ตลอดชีพ + 50 ปี","25 ปี"],"correct":2,"explain":""},{"q":"นาย ก. เป็นลูกจ้างสร้างงานออกแบบในเวลางาน โดยสัญญาไม่ได้ระบุเรื่องลิขสิทธิ์ ใครเป็นเจ้าของลิขสิทธิ์","options":["นายจ้าง","นาย ก. (ลูกจ้าง)","เป็นของรัฐ","ไม่มีลิขสิทธิ์"],"correct":1,"explain":""},{"q":"อายุสิทธิบัตรการประดิษฐ์คือ","options":["10 ปี","20 ปี","50 ปี","6 ปี"],"correct":1,"explain":""},{"q":"ข้อใดเป็นเงื่อนไขของสิทธิบัตรการประดิษฐ์","options":["ใหม่ + มีขั้นการประดิษฐ์สูงขึ้น + ใช้ในอุตสาหกรรมได้","บ่งเฉพาะ","เป็นความลับ","เผยแพร่แล้ว"],"correct":0,"explain":""},{"q":"เครื่องหมายการค้ามีอายุคุ้มครองกี่ปี","options":["5 ปี ต่อไม่ได้","10 ปี ต่ออายุได้เรื่อย ๆ","20 ปี","ตลอดชีพ"],"correct":1,"explain":""},{"q":"การ \"ปลอม\" เครื่องหมายการค้าที่จดทะเบียนแล้ว มีโทษสูงสุด","options":["จำคุก 1 ปี","จำคุก 2 ปี/ปรับ 2 แสน","จำคุก 4 ปี/ปรับ 4 แสน","ปรับ 5 พัน"],"correct":2,"explain":""},{"q":"ข้อใด **ไม่** ถือว่ามีลิขสิทธิ์","options":["นวนิยาย","คำพิพากษาของศาล","ภาพถ่าย","เพลง"],"correct":1,"explain":""},{"q":"สูตรน้ำอัดลมที่บริษัทเก็บเป็นความลับ ได้รับความคุ้มครองในฐานะใด","options":["สิทธิบัตร","ลิขสิทธิ์","ความลับทางการค้า","เครื่องหมายการค้า"],"correct":2,"explain":""},{"q":"การคุ้มครองลิขสิทธิ์ **ไม่** ครอบคลุมสิ่งใด","options":["การแสดงออกที่มีรูปร่าง","ความคิด/หลักการ/ทฤษฎี","ภาพวาด","งานเขียน"],"correct":1,"explain":""},{"q":"จำพวกสินค้าและบริการในการจดเครื่องหมายการค้ามีทั้งหมดกี่จำพวก","options":["34","40","45","50"],"correct":2,"explain":""}]},{"name":"AI Law \u0026 Ethics","questions":[{"q":"ข้อใดอธิบาย Generative AI ได้ถูกต้อง","options":["AI ที่ค้นหาข้อมูล","AI ที่สร้างเนื้อหาใหม่","AI ที่จำแนกรูปภาพ","AI ที่จัดเรียงข้อมูล"],"correct":1,"explain":""},{"q":"กฎหมาย AI ของไทยขณะนี้มีสถานะอย่างไร","options":["บังคับใช้แล้ว","ยังเป็นร่าง พรฎ.","ถูกยกเลิก","รวมอยู่ใน PDPA"],"correct":1,"explain":""},{"q":"EU AI Act แบ่งความเสี่ยงเป็นกี่ระดับ","options":["3","4","5","6"],"correct":1,"explain":""},{"q":"ระบบให้คะแนนความน่าเชื่อถือประชาชน (Social Scoring) จัดอยู่ในความเสี่ยงระดับใดตาม EU AI Act","options":["ต่ำ","จำกัด","สูง","ต้องห้าม"],"correct":3,"explain":""},{"q":"Chatbot ที่คุยกับลูกค้า ต้องปฏิบัติตามข้อกำหนดใด","options":["ห้ามใช้","แจ้งผู้ใช้ว่ากำลังคุยกับ AI","ขออนุญาตศาล","ไม่มีข้อกำหนด"],"correct":1,"explain":""},{"q":"การใช้ AI คัดเลือกผู้สมัครงาน จัดอยู่ความเสี่ยงระดับใด","options":["ต่ำ","จำกัด","สูง","ต้องห้าม"],"correct":2,"explain":""},{"q":"แนวจริยธรรม AI ของไทยออกโดยหน่วยงานใด","options":["สคส.","ETDA","สกมช.","กสทช."],"correct":1,"explain":""},{"q":"ปัญหา \"Black Box\" ของ AI หมายถึง","options":["AI ทำงานช้า","อธิบายไม่ได้ว่า AI ใช้ตรรกะใดจึงได้ผลลัพธ์","AI ราคาแพง","AI ใช้ไฟมาก"],"correct":1,"explain":""},{"q":"\"AI Hallucination\" คือ","options":["AI สร้างผลลัพธ์ที่ดูน่าเชื่อแต่ผิด/ไม่จริง","AI ทำงานเร็วเกินไป","AI ปิดตัวเอง","AI ถูกแฮก"],"correct":0,"explain":""},{"q":"กรณี COMPAS ในสหรัฐสะท้อนปัญหาด้านใดของ AI","options":["ความเร็ว","อคติ/ความไม่เป็นธรรม (Bias/Fairness)","ต้นทุน","ความปลอดภัย"],"correct":1,"explain":""},{"q":"หลักการสำคัญที่สุดของจริยธรรม AI คือข้อใด","options":["AI ทำงานแทนมนุษย์ทั้งหมด","Human-centric (มนุษย์ควบคุมได้)","ลดต้นทุน","เพิ่มความเร็ว"],"correct":1,"explain":""},{"q":"การที่ Generative AI จำและเปิดเผยข้อมูลส่วนบุคคลจาก training data เรียกว่า","options":["Anonymization","Model Memorization / Data Leakage","Encryption","Tokenization"],"correct":1,"explain":""},{"q":"ข้อใด **ไม่ใช่** ประเภทของ Generative AI","options":["text-to-image","text-to-video","text-to-robot action","structured-data sorting"],"correct":3,"explain":""},{"q":"องค์กรนำ Copilot/AI builder ไปฝังในระบบ automation เดิม ผลทางกฎหมายเป็นอย่างไร","options":["ทั้งระบบหลุดจากการกำกับ","เฉพาะส่วนที่เป็น AI ตกอยู่ใต้ AI Act","ต้องห้ามใช้","อยู่ใต้ PDPA เท่านั้น"],"correct":1,"explain":""},{"q":"บริษัทใช้ Microsoft Vision API ทำระบบรักษาความปลอดภัย และใช้ Language API กรองใบสมัครงาน จัดอยู่ระดับใดตาม EU AI Act","options":["ต่ำ","จำกัด","สูง (High Risk)","ต้องห้าม"],"correct":2,"explain":""},{"q":"การนำ Azure AI Services ไปใช้ทำ social scoring หรือ biometric mass surveillance จัดอยู่ระดับใด","options":["ต่ำ","จำกัด","สูง","ต้องห้าม (Prohibited)"],"correct":3,"explain":""},{"q":"บทลงโทษสูงสุดตาม EU AI Act คือข้อใด","options":["EUR 35 ล้าน หรือ 7% ของรายได้ทั้งโลก","5 ล้านบาท","EUR 20 ล้าน หรือ 4%","จำคุก 2 ปี"],"correct":0,"explain":""},{"q":"ลักษณะของ Social scoring ที่ \"ต้องห้าม\" ตาม EU AI Act คือข้อใด","options":["ให้คะแนนเพื่อมอบรางวัล","ปฏิบัติต่อคน detrimentally/unfavorably อย่างไม่เป็นธรรมหรือไม่ได้สัดส่วน","เก็บข้อมูลโดยขอความยินยอม","ใช้เฉพาะในภาครัฐ"],"correct":1,"explain":""}]},{"name":"ธุรกรรมอิเล็กทรอนิกส์","questions":[{"q":"พ.ร.บ.ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ ประกาศใช้ปีใด","options":["2540","2544","2550","2562"],"correct":1,"explain":""},{"q":"หลักการที่ถือว่าข้อมูลอิเล็กทรอนิกส์มีผลทางกฎหมายเทียบเท่ากระดาษ","options":["Party Autonomy","Functional Equivalence","Technological Neutrality","Proportionality"],"correct":1,"explain":""},{"q":"หลักที่กฎหมายไม่ระบุเฉพาะเจาะจงเทคโนโลยีใด","options":["Functional Equivalence","Technological Neutrality","Fairness","Accountability"],"correct":1,"explain":""},{"q":"ลายมือชื่ออิเล็กทรอนิกส์ที่น่าเชื่อถือสูงสุดคือประเภทใด","options":["พิมพ์ชื่อท้ายอีเมล","สแกนลายเซ็น","ลายมือชื่อที่มีใบรับรองจาก CA","รหัส OTP"],"correct":2,"explain":""},{"q":"หน่วยงานหลักที่ดูแลธุรกรรมทางอิเล็กทรอนิกส์ของไทย","options":["สคส.","ETDA (สพธอ.)","สกมช.","กสทช."],"correct":1,"explain":""},{"q":"กฎหมายต้นแบบระหว่างประเทศด้านพาณิชย์อิเล็กทรอนิกส์คือ","options":["GDPR","UNCITRAL Model Law on E-Commerce","Berne Convention","Paris Convention"],"correct":1,"explain":""},{"q":"การประชุมผ่านสื่ออิเล็กทรอนิกส์รองรับโดยกฎหมายใด","options":["พ.ร.บ.คอมพิวเตอร์","พ.ร.ก.การประชุมผ่านสื่ออิเล็กทรอนิกส์ 2563","PDPA","พ.ร.บ.ไซเบอร์"],"correct":1,"explain":""},{"q":"ข้อใดถูกต้องเกี่ยวกับพยานหลักฐานอิเล็กทรอนิกส์","options":["รับฟังไม่ได้เลย","ห้ามปฏิเสธการรับฟังเพียงเพราะเป็นข้อมูลอิเล็กทรอนิกส์","ต้องแปลงเป็นกระดาษก่อน","ใช้ได้เฉพาะคดีอาญา"],"correct":1,"explain":""}]},{"name":"★ ข้อสอบจำลอง 60 คะแนน","questions":[{"q":"PDPA บังคับใช้เต็มรูปแบบเมื่อใด","options":["27 พ.ค.62","1 มิ.ย.65","1 ม.ค.63","28 พ.ค.62"],"correct":1,"explain":"11 | ก | 21 | ข"},{"q":"ข้อใดเป็นข้อมูลส่วนบุคคลตาม ม.6","options":["ข้อมูลบริษัท","ข้อมูลคนตาย","IP address ของบุคคล","ยอดขายรวม"],"correct":2,"explain":"12 | ข | 22 | ค"},{"q":"ฐานการประมวลผลของ CCTV คือ","options":["ความยินยอม","สัญญา","ประโยชน์โดยชอบด้วยกฎหมาย","ภารกิจรัฐ"],"correct":2,"explain":"13 | ค | 23 | ค"},{"q":"ข้อมูลใดเป็น Sensitive Data ตาม ม.26","options":["เบอร์โทร","ข้อมูลสุขภาพ","ที่อยู่","เลขบัญชี"],"correct":1,"explain":"14 | ค | 24 | ง"},{"q":"ต้องแจ้งเหตุละเมิดข้อมูลต่อ สคส. ภายใน","options":["24 ชม.","48 ชม.","72 ชม.","7 วัน"],"correct":2,"explain":"15 | ข | 25 | ข"},{"q":"สิทธิ Right to be forgotten อยู่มาตราใด","options":["ม.30","ม.32","ม.33","ม.36"],"correct":2,"explain":"16 | ข | 26 | ข"},{"q":"มาตรการความปลอดภัยตาม PDPA ครอบคลุม","options":["CIA","AAA","PKI","DPO"],"correct":0,"explain":"17 | ข | 27 | ข"},{"q":"DP เมื่อพบเหตุละเมิดต้องแจ้งต่อ","options":["สคส.","DC","เจ้าของข้อมูล","ตำรวจ"],"correct":1,"explain":"18 | ค | 28 | ข"},{"q":"โทษทางปกครองสูงสุดของ PDPA","options":["1 ล้าน","3 ล้าน","5 ล้าน","10 ล้าน"],"correct":2,"explain":"19 | ข | 29 | ข"},{"q":"PDPA มีฐานการประมวลผลทั่วไปกี่ฐาน","options":["5","6","7","8"],"correct":2,"explain":"20 | ข | 30 | ค"},{"q":"การแฮกเข้าระบบที่มีมาตรการป้องกันโดยมิชอบ ตรงกับ","options":["ม.5","ม.7","ม.10","ม.14"],"correct":0,"explain":""},{"q":"การโจมตี DDoS ตรงกับมาตราใดของ พ.ร.บ.คอม","options":["ม.7","ม.10","ม.13","ม.16"],"correct":1,"explain":""},{"q":"การโพสต์ข่าวปลอมกระทบความมั่นคง ตรงกับ","options":["ม.8","ม.11","ม.14","ม.16"],"correct":2,"explain":""},{"q":"ผู้ให้บริการเก็บ log อย่างน้อยกี่วัน","options":["30","60","90","180"],"correct":2,"explain":""},{"q":"ผู้ให้บริการพ้นผิดตาม ม.15 เมื่อ","options":["จ่ายค่าปรับ","ได้รับแจ้งเตือนแล้วนำข้อมูลออก","ปิดเว็บ","ไม่มีทางพ้น"],"correct":1,"explain":""},{"q":"\"CII\" ตาม พ.ร.บ.ไซเบอร์ คือ","options":["ข้อมูลส่วนบุคคล","โครงสร้างพื้นฐานสำคัญทางสารสนเทศ","ลายเซ็นดิจิทัล","ผู้ให้บริการ"],"correct":1,"explain":""},{"q":"หน่วยปฏิบัติหลักของ พ.ร.บ.ไซเบอร์","options":["สคส.","สกมช.","ETDA","กสทช."],"correct":1,"explain":""},{"q":"ความรับผิดของผู้บริหารตาม พ.ร.บ.ไซเบอร์ อยู่มาตราใด","options":["ม.49","ม.60","ม.77","ม.5"],"correct":2,"explain":""},{"q":"ลิขสิทธิ์เกิดขึ้นเมื่อ","options":["จดทะเบียน","สร้างสรรค์งานเสร็จ","เผยแพร่","ชำระค่าธรรมเนียม"],"correct":1,"explain":""},{"q":"ซอฟต์แวร์ได้รับความคุ้มครองในฐานะงาน","options":["ศิลปกรรม","วรรณกรรม","สิทธิบัตร","ความลับการค้า"],"correct":1,"explain":""},{"q":"อายุสิทธิบัตรการประดิษฐ์","options":["10 ปี","20 ปี","50 ปี","6 ปี"],"correct":1,"explain":""},{"q":"การ \"ปลอม\" เครื่องหมายการค้าที่จดแล้ว โทษสูงสุด","options":["1 ปี","2 ปี/2 แสน","4 ปี/4 แสน","5 พัน"],"correct":2,"explain":""},{"q":"สูตรลับที่บริษัทเก็บไว้ คุ้มครองในฐานะ","options":["สิทธิบัตร","ลิขสิทธิ์","ความลับทางการค้า","เครื่องหมายการค้า"],"correct":2,"explain":""},{"q":"Social scoring จัดอยู่ความเสี่ยงระดับใดตาม EU AI Act","options":["ต่ำ","จำกัด","สูง","ต้องห้าม"],"correct":3,"explain":""},{"q":"Chatbot คุยกับลูกค้า ต้องปฏิบัติตามข้อกำหนดใด","options":["ห้ามใช้","แจ้งว่าเป็น AI","ขออนุญาตศาล","ไม่มีข้อกำหนด"],"correct":1,"explain":""},{"q":"แนวจริยธรรม AI ของไทยออกโดย","options":["สคส.","ETDA","สกมช.","กสทช."],"correct":1,"explain":""},{"q":"กรณี COMPAS สะท้อนปัญหา AI ด้านใด","options":["ความเร็ว","อคติ/ความไม่เป็นธรรม","ต้นทุน","ความปลอดภัย"],"correct":1,"explain":""},{"q":"หลักที่ถือว่าข้อมูลอิเล็กทรอนิกส์เทียบเท่ากระดาษ","options":["Party Autonomy","Functional Equivalence","Technological Neutrality","Proportionality"],"correct":1,"explain":""},{"q":"หน่วยงานหลักด้านธุรกรรมอิเล็กทรอนิกส์","options":["สคส.","ETDA","สกมช.","กสทช."],"correct":1,"explain":""},{"q":"ลายมือชื่ออิเล็กทรอนิกส์ที่น่าเชื่อถือสูงสุด","options":["พิมพ์ชื่อท้ายเมล","สแกนลายเซ็น","มีใบรับรองจาก CA","OTP เปล่า"],"correct":2,"explain":""}]}];
+const LETTERS = ['ก','ข','ค','ง','จ'];
+const $ = s => document.querySelector(s);
+
+let topicIdx = -1;      // -1 = รวมทุกหัวข้อ
+let qCountSel = 'all';
+let quiz = [];          // ชุดข้อสอบรอบนี้
+let cur = 0, score = 0, answered = false;
+let wrongs = [];
+
+function md(t){
+  const e = (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return e.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function pool(){
+  if (topicIdx===-1) return QUIZZES.flatMap(t=>t.questions);
+  return QUIZZES[topicIdx].questions;
+}
+
+function renderSetup(){
+  const tc = $('#topicChips'); tc.innerHTML='';
+  const mk=(label,idx)=>{const b=document.createElement('button');b.className='chip'+(idx===topicIdx?' active':'');
+    b.textContent=label;b.onclick=()=>{topicIdx=idx;renderSetup();};tc.appendChild(b);};
+  mk('รวมทุกหัวข้อ ('+QUIZZES.flatMap(t=>t.questions).length+')',-1);
+  QUIZZES.forEach((t,i)=>mk(t.name+' ('+t.questions.length+')',i));
+
+  const cc=$('#countChips'); cc.innerHTML='';
+  const total=pool().length;
+  const opts=[10,20,'all'].filter(n=>n==='all'||n<=total);
+  if(opts.length===0||opts[0]==='all') opts.unshift = opts;
+  [...new Set(opts)].forEach(n=>{
+    const b=document.createElement('button');b.className='chip'+(n==qCountSel?' active':'');
+    b.textContent=(n==='all'?('ทั้งหมด ('+total+')'):n+' ข้อ');
+    b.onclick=()=>{qCountSel=n;renderSetup();};cc.appendChild(b);
+  });
+  if(![...new Set(opts)].some(n=>n==qCountSel)) qCountSel='all';
+}
+
+function start(){
+  let qs = shuffle(pool());
+  if (qCountSel!=='all') qs = qs.slice(0, qCountSel);
+  quiz = qs.map(q=>{
+    let idxs = q.options.map((_,i)=>i);
+    if ($('#shuffleOpt').checked) idxs = shuffle(idxs);
+    return { q:q.q, explain:q.explain,
+             options: idxs.map(i=>q.options[i]),
+             correct: idxs.indexOf(q.correct) };
+  });
+  cur=0; score=0; wrongs=[];
+  $('#setup').classList.add('hidden'); $('#result').classList.add('hidden');
+  $('#quiz').classList.remove('hidden');
+  renderQ();
+}
+
+function renderQ(){
+  answered=false;
+  const q=quiz[cur];
+  $('#qcount').textContent='ข้อ '+(cur+1)+' / '+quiz.length;
+  $('#qscore').textContent='คะแนน '+score;
+  $('#qprog').style.width=(cur/quiz.length*100)+'%';
+  $('#qnum').textContent='คำถามที่ '+(cur+1);
+  $('#qtext').innerHTML=md(q.q);
+  $('#explain').classList.add('hidden');
+  $('#nextBtn').classList.add('hidden');
+  const box=$('#opts'); box.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const d=document.createElement('div'); d.className='opt';
+    d.innerHTML='<span class="k">'+LETTERS[i]+'.</span><span>'+md(opt)+'</span>';
+    d.onclick=()=>choose(i,d);
+    box.appendChild(d);
+  });
+}
+
+function choose(i,el){
+  if(answered) return;
+  answered=true;
+  const q=quiz[cur];
+  const mode=$('#mode').value;
+  const nodes=$('#opts').querySelectorAll('.opt');
+  nodes.forEach(n=>n.classList.add('disabled'));
+  if(i===q.correct){ score++; el.classList.add('correct'); }
+  else {
+    el.classList.add('wrong');
+    wrongs.push({q:q.q, your:q.options[i], correct:q.options[q.correct], cl:LETTERS[i], cc:LETTERS[q.correct]});
+    if(mode==='instant') nodes[q.correct].classList.add('correct');
+  }
+  $('#qscore').textContent='คะแนน '+score;
+  if(mode==='instant' && q.explain){
+    $('#explain').innerHTML='<strong>เฉลย:</strong> '+md(q.explain);
+    $('#explain').classList.remove('hidden');
+  }
+  $('#nextBtn').classList.remove('hidden');
+  $('#nextBtn').textContent = (cur===quiz.length-1)?'ดูผลคะแนน ✓':'ถัดไป →';
+}
+
+function nextQ(){
+  if(cur<quiz.length-1){ cur++; renderQ(); }
+  else showResult();
+}
+
+function showResult(){
+  $('#quiz').classList.add('hidden');
+  $('#result').classList.remove('hidden');
+  const pct=Math.round(score/quiz.length*100);
+  $('#scoreNum').textContent=score+' / '+quiz.length;
+  let g, color;
+  if(pct>=90){g='🏆 ยอดเยี่ยม! แม่นมาก';color='var(--good)';}
+  else if(pct>=70){g='👍 ดี ทบทวนข้อที่ผิดอีกนิด';color='var(--accent)';}
+  else if(pct>=50){g='📖 พอใช้ ควรอ่านสรุปเพิ่ม';color='#fbbf24';}
+  else {g='💪 สู้ๆ อ่านสรุปเนื้อหาแล้วลองใหม่';color='var(--bad)';}
+  $('#grade').innerHTML='<span style="color:'+color+'">'+g+' ('+pct+'%)</span>';
+  const rv=$('#review'); rv.innerHTML='';
+  if(wrongs.length){
+    rv.innerHTML='<div style="text-align:left;color:var(--muted);margin-bottom:8px">ข้อที่ตอบผิด ('+wrongs.length+'):</div>';
+    wrongs.forEach(w=>{
+      const d=document.createElement('div'); d.className='review-item';
+      d.innerHTML='<div class="q">'+md(w.q)+'</div>'+
+        '<div class="ans">คุณตอบ '+w.cl+'. '+md(w.your)+'</div>'+
+        '<div class="cor">เฉลย '+w.cc+'. '+md(w.correct)+'</div>';
+      rv.appendChild(d);
+    });
+  } else {
+    rv.innerHTML='<div style="color:var(--good)">ตอบถูกทุกข้อ 🎉</div>';
+  }
+}
+
+$('#startBtn').onclick=start;
+$('#nextBtn').onclick=nextQ;
+$('#againBtn').onclick=()=>{ $('#result').classList.add('hidden'); $('#setup').classList.remove('hidden'); renderSetup(); };
+renderSetup();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แฟลชการ์ด – จริยธรรมและกฎหมายไซเบอร์</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --card:#f8fafc; --card2:#fef9c3;
+    --txt:#e2e8f0; --accent:#38bdf8; --good:#22c55e; --bad:#f87171; --muted:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--txt);
+       min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+  h1{font-size:20px;margin:6px 0 2px;text-align:center}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .decks{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:820px;margin-bottom:14px}
+  .deck-btn{background:var(--panel);color:var(--txt);border:1px solid #334155;border-radius:999px;
+            padding:8px 14px;font-size:14px;cursor:pointer;transition:.15s;font-family:inherit}
+  .deck-btn:hover{border-color:var(--accent)}
+  .deck-btn.active{background:var(--accent);color:#03263a;border-color:var(--accent);font-weight:700}
+  .deck-btn small{opacity:.7;margin-left:4px}
+  .bar{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:10px;
+       font-size:13px;color:var(--muted)}
+  .toggle{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+  .progress{width:min(560px,92vw);height:8px;background:var(--panel);border-radius:99px;overflow:hidden;margin-bottom:14px}
+  .progress > div{height:100%;background:var(--good);width:0;transition:.3s}
+  .card{width:min(560px,92vw);min-height:300px;background:var(--card);color:#0f172a;border-radius:18px;
+        padding:28px 26px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;
+        box-shadow:0 18px 40px rgba(0,0,0,.45);position:relative;transition:.15s;user-select:none}
+  .card.flipped{background:var(--card2)}
+  .card .side-label{position:absolute;top:14px;left:18px;font-size:12px;font-weight:700;letter-spacing:.5px;
+        color:#64748b;text-transform:uppercase}
+  .card .tag{position:absolute;top:12px;right:16px;font-size:11px;color:#64748b;max-width:55%;text-align:right}
+  .card .content{font-size:21px;line-height:1.55;text-align:center;margin-top:8px}
+  .card .content strong{color:#b91c1c}
+  .card.flipped .content strong{color:#a16207}
+  .hint{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
+  .known-badge{position:absolute;bottom:12px;right:16px;font-size:12px;color:var(--good);font-weight:700;display:none}
+  .card.is-known .known-badge{display:block}
+  .controls{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+  button.act{border:none;border-radius:12px;padding:12px 18px;font-size:15px;cursor:pointer;font-family:inherit;
+        font-weight:600;transition:.15s;color:#03263a}
+  .nav{background:#475569;color:#fff}
+  .bad{background:var(--bad);color:#3a0a0a}
+  .good{background:var(--good)}
+  button.act:hover{filter:brightness(1.08)}
+  .counter{font-size:14px;color:var(--txt);margin-top:14px}
+  .empty{color:var(--muted);margin-top:40px;text-align:center}
+  a.reset{color:var(--muted);font-size:12px;margin-top:18px;cursor:pointer;text-decoration:underline}
+  kbd{background:#334155;border-radius:5px;padding:1px 6px;font-size:11px}
+</style>
+</head>
+<body>
+  <a href="หน้าแรก.html" style="position:fixed;top:12px;left:14px;color:#94a3b8;font-size:13px;text-decoration:none;background:#1e293b;border:1px solid #334155;padding:6px 12px;border-radius:999px;z-index:99">🏠 หน้าแรก</a>
+  <h1>🔑 แฟลชการ์ด — จริยธรรมและกฎหมายไซเบอร์</h1>
+  <div class="sub">คลิกการ์ดเพื่อพลิกดูคำตอบ · <kbd>Space</kbd> พลิก · <kbd>←</kbd><kbd>→</kbd> เปลี่ยนใบ · <kbd>1</kbd> ยังไม่รู้ · <kbd>2</kbd> รู้แล้ว</div>
+
+  <div class="decks" id="decks"></div>
+
+  <div class="bar">
+    <label class="toggle"><input type="checkbox" id="shuffle"> สลับลำดับ</label>
+    <label class="toggle"><input type="checkbox" id="onlyUnknown"> ทบทวนเฉพาะที่ยังไม่รู้</label>
+    <span id="stat"></span>
+  </div>
+
+  <div class="progress"><div id="pbar"></div></div>
+
+  <div id="stage"></div>
+  <div class="counter" id="counter"></div>
+  <a class="reset" id="reset">ล้างสถานะ "รู้แล้ว" ของชุดนี้</a>
+
+<script>
+const DECKS = [{"name":"PDPA","cards":[{"q":"PDPA คือ พ.ร.บ. อะไร ปีใด","a":"พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล **พ.ศ. 2562**","tag":""},{"q":"บังคับใช้เต็มรูปแบบเมื่อใด","a":"**1 มิถุนายน 2565**","tag":""},{"q":"หน่วยงานกำกับ PDPA","a":"สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (**สคส./PDPC**)","tag":""},{"q":"มาตราที่นิยาม \"ข้อมูลส่วนบุคคล\"","a":"**มาตรา 6**","tag":""},{"q":"นิยามข้อมูลส่วนบุคคล","a":"ข้อมูลที่ระบุตัวบุคคลได้ ทางตรงหรือทางอ้อม **ไม่รวมผู้ถึงแก่กรรม**","tag":""},{"q":"มาตรา \"ข้อยกเว้นไม่ใช้บังคับ\"","a":"**มาตรา 4** (6 กรณี)","tag":""},{"q":"มาตราขอบเขตบังคับใช้ (ใน/นอกประเทศ)","a":"**มาตรา 5**","tag":""},{"q":"DC ย่อมาจาก / แปลว่า","a":"Data Controller = ผู้มีอำนาจ **ตัดสินใจ** เก็บ/ใช้/เปิดเผยข้อมูล","tag":""},{"q":"DP ย่อมาจาก / แปลว่า","a":"Data Processor = ผู้ดำเนินการ **ตามคำสั่ง** DC","tag":""},{"q":"DPO คือใคร อยู่มาตราใด","a":"เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (**ม.41–42**)","tag":""},{"q":"PDPA มีกี่ฐานการประมวลผล","a":"**7 ฐาน** (Consent ม.19 + 6 ข้อยกเว้น ม.24)","tag":""},{"q":"ฐานความยินยอม อยู่มาตราใด","a":"**มาตรา 19**","tag":""},{"q":"ฐานสัญญา (Contract)","a":"**ม.24(3)**","tag":""},{"q":"ฐานหน้าที่ตามกฎหมาย (Legal Obligation)","a":"**ม.24(6)**","tag":""},{"q":"ฐานระงับอันตรายต่อชีวิต (Vital Interest)","a":"**ม.24(2)** [Sensitive: ม.26(1)]","tag":""},{"q":"ฐานภารกิจรัฐ (Public Task)","a":"**ม.24(4)**","tag":""},{"q":"ฐานประโยชน์โดยชอบด้วยกฎหมาย (Legitimate Interest)","a":"**ม.24(5)** + ต้องทำ Balancing Test","tag":""},{"q":"ฐานวิจัย/สถิติ (Research)","a":"**ม.24(1)**","tag":""},{"q":"กล้องวงจรปิด (CCTV) ใช้ฐานใด","a":"ฐานประโยชน์โดยชอบด้วยกฎหมาย **ม.24(5)**","tag":""},{"q":"ถอนความยินยอมได้เมื่อใด มาตราใด","a":"**เมื่อใดก็ได้** (ม.19 ว.5)","tag":""},{"q":"ความยินยอมต้องทำรูปแบบใด","a":"ชัดแจ้ง เป็นหนังสือ/อิเล็กทรอนิกส์ แยกส่วน ไม่หลอกลวง","tag":""},{"q":"ผู้เยาว์อายุเท่าใดต้องให้ผู้ปกครองยินยอมเสมอ","a":"**ไม่เกิน 10 ปี**","tag":""},{"q":"ข้อมูลอ่อนไหว (Sensitive) อยู่มาตราใด","a":"**มาตรา 26**","tag":""},{"q":"ยกตัวอย่างข้อมูลอ่อนไหว 5 อย่าง","a":"เชื้อชาติ, ศาสนา, สุขภาพ, พฤติกรรมทางเพศ, ประวัติอาชญากรรม, พันธุกรรม, ชีวภาพ, สหภาพแรงงาน, ความเห็นการเมือง, ความพิการ","tag":""},{"q":"Sensitive Data ต้องขอความยินยอมแบบใด","a":"**ความยินยอมโดยชัดแจ้ง (Explicit Consent)**","tag":""},{"q":"สิทธิเข้าถึง \u0026 ขอสำเนา","a":"Right of Access — **ม.30**","tag":""},{"q":"สิทธิโอนย้ายข้อมูล","a":"Data Portability — **ม.31**","tag":""},{"q":"สิทธิคัดค้าน","a":"Right to Object — **ม.32**","tag":""},{"q":"สิทธิขอลบ/ทำลาย","a":"Right to Erasure / to be forgotten — **ม.33**","tag":""},{"q":"สิทธิระงับการใช้","a":"Right to Restriction — **ม.34**","tag":""},{"q":"สิทธิขอแก้ไขให้ถูกต้อง","a":"Right to Rectification — **ม.36**","tag":""},{"q":"สิทธิได้รับการแจ้ง / Privacy Notice","a":"**ม.23**","tag":""},{"q":"หน้าที่ DC อยู่มาตราใด","a":"**มาตรา 37**","tag":""},{"q":"มาตรการความปลอดภัยครอบคลุม 3 ด้านอะไร","a":"**CIA** = Confidentiality, Integrity, Availability","tag":""},{"q":"ต้องแจ้งเหตุละเมิดข้อมูลต่อ สคส. ภายในกี่ชั่วโมง","a":"**72 ชั่วโมง** นับแต่ทราบ (ม.37(4))","tag":""},{"q":"DP แจ้งเหตุละเมิดต่อใคร","a":"ต่อ **DC** (ไม่ใช่ สคส.) — ม.40","tag":""},{"q":"ROPA คืออะไร มาตราใด","a":"Record of Processing Activities — บันทึกรายการประมวลผล (**ม.39**)","tag":""},{"q":"หน้าที่ DP อยู่มาตราใด","a":"**มาตรา 40**","tag":""},{"q":"การโอนข้อมูลไปต่างประเทศ มาตราใด","a":"**มาตรา 28** — ปลายทางต้องมีมาตรฐานคุ้มครองเพียงพอ","tag":""},{"q":"โทษอาญาสูงสุดของ PDPA","a":"จำคุก ≤ 1 ปี และ/หรือ ปรับ ≤ **1,000,000 บาท**","tag":""},{"q":"โทษทางปกครองสูงสุด","a":"ปรับ ≤ **5,000,000 บาท**","tag":""},{"q":"ค่าสินไหมเพื่อการลงโทษ สูงสุดกี่เท่า","a":"ไม่เกิน **2 เท่า** ของค่าสินไหมที่แท้จริง (ม.77–78)","tag":""},{"q":"Anonymization ต่างจาก Pseudonymization อย่างไร","a":"Anonymization = ระบุตัวไม่ได้ **พ้น**จากเป็นข้อมูลส่วนบุคคล; Pseudonymization = แฝงข้อมูล **ยังเป็น**ข้อมูลส่วนบุคคล","tag":""},{"q":"ฐานรัฐธรรมนูญของสิทธิความเป็นส่วนตัว","a":"รัฐธรรมนูญ 2560 **มาตรา 32**","tag":""},{"q":"เป้าหมายสูงสุดเชิงจริยธรรมของ PDPA","a":"สร้าง **ความไว้วางใจ (Trust)** ในสังคม/เศรษฐกิจดิจิทัล","tag":""},{"q":"5 เสาหลักจริยธรรม PDPA","a":"ศักดิ์ศรีมนุษย์, ความเป็นส่วนตัว, การกำหนดเจตนาตนเอง, ความเป็นธรรม/ยุติธรรม, ความรับผิดชอบ/โปร่งใส","tag":""},{"q":"กฎหมายต่างชาติที่เป็นต้นแบบ PDPA","a":"GDPR (EU), PDPA 2012 (สิงคโปร์)","tag":""},{"q":"บทเฉพาะกาลเรื่องข้อมูลเดิม","a":"**มาตรา 95**","tag":""}]},{"name":"พ.ร.บ.คอม/ไซเบอร์","cards":[{"q":"พ.ร.บ.คอมพิวเตอร์ ฉบับแรก ปีใด","a":"พ.ศ. **2550**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ฉบับแก้ไขเพิ่มเติม ปีใด","a":"พ.ศ. **2560** (ฉบับที่ 2)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"มาตรานิยามศัพท์","a":"**มาตรา 3**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.5 ความผิดอะไร","a":"เข้าถึง **ระบบ** ที่มีมาตรการป้องกันโดยมิชอบ","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.7 ความผิดอะไร","a":"เข้าถึง **ข้อมูล** โดยมิชอบ","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.8 ความผิดอะไร","a":"**ดักรับ** ข้อมูลระหว่างส่ง","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.9 ความผิดอะไร","a":"แก้ไข/ทำลายข้อมูลผู้อื่น (โทษ ≤5 ปี)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.10 ความผิดอะไร","a":"**รบกวน/ขัดขวางระบบ** (เช่น DoS/DDoS)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.11 ความผิดอะไร","a":"**สแปม** (ส่งข้อมูลปกปิดแหล่งที่มา)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.12 คืออะไร","a":"**เหตุเพิ่มโทษ** (กระทบความมั่นคง/CII/ถึงตาย) สูงสุด 5–20 ปี","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.13 ความผิดอะไร","a":"จำหน่าย/เผยแพร่ **ชุดคำสั่งมัลแวร์**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.14 ความผิดอะไร","a":"นำเข้า **ข้อมูลเท็จ/ปลอม/ลามก** (ข่าวปลอม ฉ้อโกง ความมั่นคง)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"\"แชร์/ส่งต่อ\" ข้อมูลผิด ม.14 โดยรู้อยู่ ผิดไหม","a":"**ผิด**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.15 เกี่ยวกับใคร","a":"**ผู้ให้บริการ (ตัวกลาง)**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ผู้ให้บริการพ้นผิดเมื่อใด","a":"เมื่อได้รับแจ้งเตือนแล้ว **นำข้อมูลออก** (notice \u0026 takedown)","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.16 ความผิดอะไร","a":"นำเข้า **ภาพตัดต่อ** ทำให้เสียชื่อเสียง","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ม.17 เรื่องอะไร","a":"เขตอำนาจ — กระทำ **นอกราชอาณาจักร** ลงโทษในไทยได้","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"พนักงานเจ้าหน้าที่ยึด/อายัดได้กี่วัน","a":"≤ 30 วัน (ขยายสูงสุด 60 วัน) ต้องรายงานศาลใน 48 ชม.","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"ผู้ให้บริการเก็บ log นานเท่าใด (ม.26)","a":"ไม่น้อยกว่า **90 วัน**","tag":"A. พ.ร.บ.คอมพิวเตอร์"},{"q":"พ.ร.บ.ไซเบอร์ บังคับใช้ปีใด","a":"พ.ศ. **2562** (28 พ.ค. 2562)","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"นิยาม \"ภัยคุกคามทางไซเบอร์\" มาตราใด","a":"**มาตรา 3**","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"CII (โครงสร้างพื้นฐานสำคัญ) มาตราใด","a":"**มาตรา 49**","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"ระดับความรุนแรงของภัย มีกี่ระดับ (ม.60)","a":"**3 ระดับ** (ไม่ร้ายแรง/ร้ายแรง/วิกฤติ)","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"โครงสร้างองค์กร 3 ระดับ","a":"**กมช. (นโยบาย) → กกท. (กำกับ) → สกมช. (ปฏิบัติ)**","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"กมช. ย่อมาจาก","a":"คณะกรรมการการรักษาความมั่นคงปลอดภัยไซเบอร์แห่งชาติ","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"สกมช. คืออะไร","a":"สำนักงาน (หน่วยปฏิบัติ) ของ พ.ร.บ.ไซเบอร์","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"กระบวนการรับมือเหตุ 5 ขั้น","a":"ตรวจพบ→ตรวจสอบ→ประเมิน→รับมือ→รายงาน","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"Cycle of Resilience (NIST)","a":"Identify→Protect→Detect→Respond→Recover","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"ความรับผิดของผู้บริหาร มาตราใด","a":"**มาตรา 77** (Executive Liability)","tag":"B. พ.ร.บ.ไซเบอร์ 2562"},{"q":"ตัวอย่าง CII","a":"ไฟฟ้า ประปา การเงิน สาธารณสุข คมนาคม โทรคมนาคม","tag":"B. พ.ร.บ.ไซเบอร์ 2562"}]},{"name":"ทรัพย์สินทางปัญญา","cards":[{"q":"IP มีกี่ประเภทตามกฎหมายไทย","a":"7 (ลิขสิทธิ์, สิทธิบัตร, เครื่องหมายการค้า, ความลับการค้า, สิ่งบ่งชี้ภูมิศาสตร์, ผังภูมิวงจรรวม, พันธุ์พืชใหม่)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"พ.ร.บ.ลิขสิทธิ์ ปีใด","a":"พ.ศ. **2537**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"พ.ร.บ.เครื่องหมายการค้า ปีใด","a":"พ.ศ. **2534**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"พ.ร.บ.สิทธิบัตร ปีใด","a":"พ.ศ. **2522**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"พ.ร.บ.ความลับทางการค้า ปีใด","a":"พ.ศ. **2545**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"ลิขสิทธิ์ต้องจดทะเบียนไหม","a":"**ไม่ต้อง** เกิดทันทีที่สร้างสรรค์","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"งานอันมีลิขสิทธิ์มีกี่ประเภท มาตราใด","a":"**8 ประเภท (มาตรา 6)**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"ซอฟต์แวร์จัดเป็นงานประเภทใด","a":"งาน **วรรณกรรม**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุลิขสิทธิ์โดยทั่วไป","a":"ตลอดชีพ + **50 ปี**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุลิขสิทธิ์งานศิลปประยุกต์","a":"**25 ปี** นับแต่สร้างสรรค์","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"หลักแบ่งความคิด vs การแสดงออก","a":"Idea–Expression Dichotomy (คุ้มครองการแสดงออก ไม่คุ้มครองความคิด)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"งานสร้างในสัญญาจ้างแรงงาน ใครเป็นเจ้าของลิขสิทธิ์","a":"**ลูกจ้าง** (เว้นแต่สัญญาระบุให้นายจ้าง)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"งานสร้างในสัญญาจ้างทำของ ใครเป็นเจ้าของ","a":"**ผู้ว่าจ้าง** (เว้นแต่ตกลงอื่น)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"ข้อยกเว้นการละเมิดลิขสิทธิ์มีกี่ข้อ","a":"**8 ข้อ** (Fair Use)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"เครื่องหมายการค้าต้องจดทะเบียนไหม","a":"**ต้องจด** ต่อกรมทรัพย์สินทางปัญญา","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"เครื่องหมายการค้ามีกี่ประเภท","a":"4 (การค้า/บริการ/รับรอง/ร่วม)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"เงื่อนไขรับจดเครื่องหมายการค้า 3 ข้อ","a":"บ่งเฉพาะ + ไม่ต้องห้าม + ไม่เหมือน/คล้ายของผู้อื่น","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุเครื่องหมายการค้า","a":"**10 ปี** ต่ออายุได้ไม่จำกัด","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"จำพวกสินค้า/บริการมีกี่จำพวก","a":"**45** (1–34 สินค้า, 35–45 บริการ)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"โทษ \"ปลอม\" เครื่องหมายการค้า","a":"จำคุก ≤ **4 ปี** หรือปรับ ≤ **400,000**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"โทษ \"เลียน\" เครื่องหมายการค้า","a":"จำคุก ≤ **2 ปี** หรือปรับ ≤ **200,000**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"การลวงขาย (Passing Off) คุ้มครองอะไร","a":"เครื่องหมาย **ที่ไม่ได้จดทะเบียน**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"สิทธิบัตรมีกี่ประเภท","a":"3 (การประดิษฐ์/การออกแบบผลิตภัณฑ์/อนุสิทธิบัตร)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"เงื่อนไขสิทธิบัตรการประดิษฐ์ 3 ข้อ","a":"ใหม่ (Novelty) + Inventive Step + Industrial Application","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุสิทธิบัตรการประดิษฐ์","a":"**20 ปี** (ต่อไม่ได้)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุสิทธิบัตรการออกแบบผลิตภัณฑ์","a":"**10 ปี**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อายุอนุสิทธิบัตร","a":"6 ปี ต่อ 2 ครั้ง×2 ปี = สูงสุด **10 ปี**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"ประดิษฐ์ในสัญญาจ้างแรงงาน ใครมีสิทธิขอสิทธิบัตร","a":"**นายจ้าง** (ลูกจ้างได้บำเหน็จพิเศษ)","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"นิยามความลับทางการค้า 3 องค์ประกอบ","a":"ยังไม่รู้ทั่วไป + มีค่าเชิงพาณิชย์เพราะเป็นความลับ + มีมาตรการรักษา","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"},{"q":"อนุสัญญาของลิขสิทธิ์ / สิทธิบัตร-เครื่องหมาย","a":"**Berne** / **Paris**","tag":"ปิดฝั่งขวา ตอบในใจ แล้วเปิดเช็ค"}]},{"name":"AI Law \u0026 Ethics","cards":[{"q":"Generative AI ต่างจาก AI เดิมอย่างไร","a":"สร้างเนื้อหา**ใหม่** (vs ค้นหา/วิเคราะห์/จำแนก)","tag":""},{"q":"กฎหมาย AI หลักของ EU","a":"**EU AI Act**","tag":""},{"q":"กฎหมาย AI ของไทยสถานะปัจจุบัน","a":"ยังเป็น **\"ร่าง\" พรฎ.** การประกอบธุรกิจบริการที่ใช้ AI (ยังไม่บังคับใช้)","tag":""},{"q":"แนวจริยธรรม AI ของไทยออกโดยใคร","a":"**ETDA** (สพธอ.)","tag":""},{"q":"EU AI Act ใช้แนวทางกำกับแบบใด","a":"**Risk-based** (ตามความเสี่ยงของ use case)","tag":""},{"q":"EU AI Act แบ่งความเสี่ยงกี่ระดับ","a":"**4 ระดับ**","tag":""},{"q":"4 ระดับความเสี่ยง","a":"ต้องห้าม / สูง / จำกัด / ต่ำ (Prohibited/High/Limited/Minimal)","tag":""},{"q":"Social scoring จัดอยู่ระดับใด","a":"**ต้องห้าม (Prohibited)**","tag":""},{"q":"Chatbot / Deepfake จัดอยู่ระดับใด","a":"**ความเสี่ยงจำกัด (Limited)** — ต้องแจ้งว่าเป็น AI","tag":""},{"q":"การคัดเลือกพนักงาน/ประเมินเครดิต จัดระดับใด","a":"**ความเสี่ยงสูง (High Risk)**","tag":""},{"q":"เกม/spam filter จัดระดับใด","a":"**ความเสี่ยงต่ำ (Minimal)**","tag":""},{"q":"6 หลักการ EU AI Act","a":"Human-centric, Transparency, Accountability, Safety\u0026Security, Data Governance, Risk-based","tag":""},{"q":"ETDA มีกี่หลักจริยธรรม AI","a":"**6 ข้อ**","tag":""},{"q":"6 หลัก ETDA","a":"Competitiveness\u0026Sustainability, Laws-Ethics-Standards, Transparency\u0026Accountability, Security\u0026Privacy, Fairness, Reliability","tag":""},{"q":"ปัญหา \"Black Box\" คืออะไร","a":"อธิบายไม่ได้ว่า AI ใช้ตรรกะใดได้ผลลัพธ์ (รู้แค่ input/output)","tag":""},{"q":"AI Hallucination คือ","a":"AI สร้างผลลัพธ์ที่ดูน่าเชื่อแต่ผิด/ไม่จริง","tag":""},{"q":"Human oversight อยู่ในมาตราใด (ร่าง/EU)","a":"**มาตรา 11**","tag":""},{"q":"GDPR มาตราเกี่ยวกับการตัดสินใจอัตโนมัติ","a":"**Article 22**","tag":""},{"q":"AI เดาข้อมูลอ่อนไหวเชื่อมกับ PDPA มาตราใด","a":"**ม.26** (Sensitive Data)","tag":""},{"q":"เคส AI อคติเชื้อชาติในศาลสหรัฐ","a":"**COMPAS**","tag":""},{"q":"เคส chatbot ถูกสอนให้เหยียด ปิดใน 16 ชม.","a":"**Microsoft Tay**","tag":""},{"q":"ความเสี่ยง AI ที่ทำข้อมูลนิรนามกลับมาระบุตัว","a":"Re-identification / Deanonymization","tag":""},{"q":"ความเสี่ยงที่ Gen AI จำ\u0026เผยข้อมูลจาก training data","a":"Model Memorization / Data Leakage","tag":""},{"q":"ร่าง พรฎ.ไทย ต่างจาก EU AI Act อย่างไร","a":"ไทยใช้ risk-based by use case แต่ยังไม่กำกับ AI-enabled products \u0026 GPAI","tag":""},{"q":"หัวใจจริยธรรม AI","a":"**Human-centric** — มนุษย์ควบคุม/ปิดได้","tag":""},{"q":"Generative AI มีแต่ LLM ใช่ไหม","a":"**ไม่ใช่** — ยังมี text→image/video/audio/music/3D/game/**robot action**","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"นำ AI builder/Copilot/cognitive services ฝังใน automation ผลทางกฎหมาย","a":"เฉพาะ**ส่วนที่เป็น AI** นั้นตกอยู่ใต้ **AI Act** (AI-Enhanced Automation)","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"ชื่อเต็มกฎหมาย AI ไทย","a":"**ร่างพระราชกฤษฎีกาการประกอบธุรกิจบริการที่ใช้งานระบบปัญญาประดิษฐ์ พ.ศ. ....**","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"Social scoring ที่ \"ต้องห้าม\" มีลักษณะอย่างไร","a":"ปฏิบัติต่อคน **detrimentally or unfavorably** อย่างไม่เป็นธรรม/ไม่ได้สัดส่วน","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"ใช้ Vision API ทำ security / Language API กรอง resume จัดระดับใด","a":"**High Risk** (ต้อง logging, human oversight, ลงทะเบียนใน EU database)","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"ใช้ Azure AI Services ทำ social scoring/biometric mass surveillance","a":"**Prohibited** (ห้ามเด็ดขาด)","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"บทลงโทษสูงสุดของ EU AI Act","a":"**EUR 35 ล้าน หรือ 7% ของรายได้ทั้งโลก**","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"},{"q":"EU AI Act บังคับใช้นอก EU ได้ไหม","a":"ได้ — ใช้กับ AI ที่ใช้/ทำตลาดใน EU (**คล้าย พรบ.คอมฯ** ของไทย)","tag":"🔴 การ์ดจุดสีแดงในสไลด์ (อ.เน้น = ออกสอบ)"}]},{"name":"ธุรกรรมอิเล็กทรอนิกส์","cards":[{"q":"พ.ร.บ.ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ ปีใด","a":"พ.ศ. **2544**","tag":"แฟลชการ์ด"},{"q":"พ.ร.บ.จัดตั้ง ETDA ปีใด","a":"พ.ศ. **2562**","tag":"แฟลชการ์ด"},{"q":"พ.ร.ก.ประชุมผ่านสื่ออิเล็กทรอนิกส์ ปีใด","a":"พ.ศ. **2563**","tag":"แฟลชการ์ด"},{"q":"หน่วยงานหลักด้านธุรกรรมอิเล็กทรอนิกส์","a":"**ETDA (สพธอ.)** + คณะกรรมการธุรกรรมทางอิเล็กทรอนิกส์","tag":"แฟลชการ์ด"},{"q":"3 หลักการพื้นฐาน","a":"Functional Equivalence, Technological Neutrality, Party Autonomy","tag":"แฟลชการ์ด"},{"q":"หลักที่ว่ากระดาษ=ข้อมูลอิเล็กทรอนิกส์","a":"**Functional Equivalence** (ความเท่าเทียมทางกฎหมาย)","tag":"แฟลชการ์ด"},{"q":"หลักที่กฎหมายไม่ผูกกับเทคโนโลยีใด","a":"**Technological Neutrality**","tag":"แฟลชการ์ด"},{"q":"หลักเสรีภาพแสดงเจตนาของคู่สัญญา","a":"**Party Autonomy**","tag":"แฟลชการ์ด"},{"q":"กฎหมายต้นแบบสากล 2 ฉบับ","a":"UNCITRAL Model Law on E-Commerce (1996) \u0026 E-Signatures (2001)","tag":"แฟลชการ์ด"},{"q":"e-signature มีกี่ระดับ","a":"**3 ระดับ** (ทั่วไป / เชื่อถือได้ / มีใบรับรอง)","tag":"แฟลชการ์ด"},{"q":"e-signature ระดับสูงสุดคือ","a":"ลายมือชื่อที่มี **ใบรับรองจาก CA**","tag":"แฟลชการ์ด"},{"q":"ข้อมูลอิเล็กทรอนิกส์ถือเป็น \"หนังสือ\" เมื่อใด","a":"เมื่อ **เข้าถึงและนำกลับมาใช้ได้** โดยความหมายไม่เปลี่ยน","tag":"แฟลชการ์ด"},{"q":"หลักเรื่องการรับฟังพยานหลักฐานอิเล็กทรอนิกส์","a":"**ห้ามปฏิเสธ**การรับฟังเพียงเพราะเป็นข้อมูลอิเล็กทรอนิกส์","tag":"แฟลชการ์ด"},{"q":"เป้าหมายเชิงจริยธรรม","a":"สร้าง **ความน่าเชื่อถือ/Trust** ในธุรกรรมออนไลน์","tag":"แฟลชการ์ด"}]}];
+
+const $ = s => document.querySelector(s);
+let deckIdx = 0;
+let order = [];      // ลำดับการ์ดที่กำลังแสดง (index ใน deck.cards)
+let pos = 0;
+let flipped = false;
+
+function deck(){ return DECKS[deckIdx]; }
+function storeKey(){ return 'fc_known_' + deckIdx; }
+function knownSet(){
+  try { return new Set(JSON.parse(localStorage.getItem(storeKey()) || '[]')); }
+  catch(e){ return new Set(); }
+}
+function saveKnown(set){ localStorage.setItem(storeKey(), JSON.stringify([...set])); }
+
+function md(t){
+  // escape HTML แล้วแปลง **bold** + ขึ้นบรรทัด
+  const e = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return e.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+}
+
+function buildOrder(){
+  const d = deck();
+  const known = knownSet();
+  let idxs = d.cards.map((_,i)=>i);
+  if ($('#onlyUnknown').checked) idxs = idxs.filter(i => !known.has(i));
+  if ($('#shuffle').checked){
+    for (let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; }
+  }
+  order = idxs; pos = 0; flipped = false;
+}
+
+function renderDecks(){
+  $('#decks').innerHTML = '';
+  DECKS.forEach((d,i)=>{
+    const b = document.createElement('button');
+    b.className = 'deck-btn' + (i===deckIdx?' active':'');
+    b.innerHTML = d.name + ' <small>('+d.cards.length+')</small>';
+    b.onclick = ()=>{ deckIdx=i; buildOrder(); renderDecks(); render(); };
+    $('#decks').appendChild(b);
+  });
+}
+
+function render(){
+  const d = deck();
+  const known = knownSet();
+  // progress
+  const total = d.cards.length;
+  const knownCount = [...known].filter(i=>i<total).length;
+  $('#pbar').style.width = total ? (knownCount/total*100)+'%' : '0';
+  $('#stat').textContent = `รู้แล้ว ${knownCount}/${total} ใบ`;
+
+  if (order.length === 0){
+    $('#stage').innerHTML = '<div class="empty">🎉 ไม่มีการ์ดให้แสดง<br>(อาจเพราะติ๊ก "ทบทวนเฉพาะที่ยังไม่รู้" แล้วรู้หมดแล้ว)</div>';
+    $('#counter').textContent = '';
+    return;
+  }
+  if (pos >= order.length) pos = order.length-1;
+  const cardIdx = order[pos];
+  const c = d.cards[cardIdx];
+  const isKnown = known.has(cardIdx);
+
+  const stage = document.createElement('div');
+  stage.innerHTML = `
+    <div class="card ${flipped?'flipped':''} ${isKnown?'is-known':''}" id="card">
+      <div class="side-label">${flipped?'คำตอบ':'คำถาม'}</div>
+      ${c.tag?`<div class="tag">${md(c.tag)}</div>`:''}
+      <div class="content">${md(flipped?c.a:c.q)}</div>
+      <div class="hint">${flipped?'':'แตะเพื่อดูคำตอบ'}</div>
+      <div class="known-badge">✓ รู้แล้ว</div>
+    </div>
+    <div class="controls">
+      <button class="act nav" id="prev">← ก่อนหน้า</button>
+      <button class="act bad" id="dunno">✗ ยังไม่รู้</button>
+      <button class="act good" id="know">✓ รู้แล้ว</button>
+      <button class="act nav" id="next">ถัดไป →</button>
+    </div>`;
+  $('#stage').innerHTML = '';
+  $('#stage').appendChild(stage);
+  $('#counter').textContent = `ใบที่ ${pos+1} / ${order.length}`;
+
+  $('#card').onclick = ()=>{ flipped=!flipped; render(); };
+  $('#prev').onclick = (e)=>{ e.stopPropagation(); prev(); };
+  $('#next').onclick = (e)=>{ e.stopPropagation(); next(); };
+  $('#know').onclick = (e)=>{ e.stopPropagation(); mark(true); };
+  $('#dunno').onclick = (e)=>{ e.stopPropagation(); mark(false); };
+}
+
+function next(){ if(pos<order.length-1){pos++;flipped=false;render();} }
+function prev(){ if(pos>0){pos--;flipped=false;render();} }
+function mark(isKnown){
+  const cardIdx = order[pos];
+  const set = knownSet();
+  if (isKnown) set.add(cardIdx); else set.delete(cardIdx);
+  saveKnown(set);
+  if (pos<order.length-1){ next(); } else { render(); }
+}
+
+document.addEventListener('keydown', e=>{
+  if (e.key===' '){ e.preventDefault(); flipped=!flipped; render(); }
+  else if (e.key==='ArrowRight') next();
+  else if (e.key==='ArrowLeft') prev();
+  else if (e.key==='1') mark(false);
+  else if (e.key==='2') mark(true);
+});
+$('#shuffle').onchange = ()=>{ buildOrder(); render(); };
+$('#onlyUnknown').onchange = ()=>{ buildOrder(); render(); };
+$('#reset').onclick = ()=>{ if(confirm('ล้างสถานะ "รู้แล้ว" ของชุด '+deck().name+' ?')){ localStorage.removeItem(storeKey()); buildOrder(); render(); } };
+
+renderDecks();
+buildOrder();
+render();
+</script>
+</body>
+</html>
