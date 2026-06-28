@@ -1,0 +1,214 @@
+# ============================================================
+#  แปลงไฟล์ .md ทุกไฟล์ในชุดเรียนรู้ -> .html อ่านสวยในเบราว์เซอร์
+#  วิธีใช้: คลิกขวาที่ไฟล์นี้ > Run with PowerShell
+#  สร้างไฟล์ .html คู่กับ .md แต่ละไฟล์ (เปิดอ่านได้ทันที ออฟไลน์)
+# ============================================================
+
+$ErrorActionPreference = 'Stop'
+$root = $PSScriptRoot
+
+# เทมเพลตหน้าอ่าน — มีตัวเรนเดอร์ Markdown เป็น JavaScript ในตัว
+$template = @'
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__TITLE__</title>
+<style>
+  :root{--bg:#0f172a;--paper:#111c33;--txt:#e6edf6;--muted:#9fb0c7;--accent:#38bdf8;--line:#2b3a52;--hl:#fcd34d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;line-height:1.75}
+  .topnav{position:sticky;top:0;background:#0b1322ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+          padding:10px 16px;display:flex;gap:14px;align-items:center;z-index:50;font-size:14px}
+  .topnav a{color:var(--muted);text-decoration:none;padding:5px 11px;border:1px solid var(--line);border-radius:999px}
+  .topnav a:hover{color:var(--accent);border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:30px 22px 80px}
+  h1,h2,h3,h4{line-height:1.35;margin:1.5em 0 .6em;font-weight:700}
+  h1{font-size:27px;border-bottom:2px solid var(--accent);padding-bottom:.3em;margin-top:.3em}
+  h2{font-size:22px;color:#bfe6fb;border-bottom:1px solid var(--line);padding-bottom:.25em}
+  h3{font-size:18px;color:#a7d8f0}
+  h4{font-size:16px;color:var(--muted)}
+  p{margin:.7em 0}
+  strong{color:#fff;font-weight:700;background:linear-gradient(transparent 62%,#fcd34d33 62%)}
+  em{color:#fbcfe8;font-style:italic}
+  code{background:#0b1322;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.92em;color:#7dd3fc;
+       font-family:"Cascadia Code",Consolas,monospace}
+  pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{border:none;padding:0;background:none}
+  a{color:var(--accent)}
+  ul,ol{margin:.5em 0 .9em;padding-left:1.6em}
+  li{margin:.3em 0}
+  ul ul,ol ol,ul ol,ol ul{margin:.2em 0}
+  blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--accent);background:#0b132288;border-radius:0 8px 8px 0;color:#cdd9e8}
+  blockquote p{margin:.3em 0}
+  hr{border:none;border-top:1px dashed var(--line);margin:1.8em 0}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#16263f;color:#bfe6fb;font-weight:700}
+  tr:nth-child(even) td{background:#0f1c30}
+  details{background:#0b1322;border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:.7em 0}
+  summary{cursor:pointer;color:var(--accent);font-weight:600}
+  ::selection{background:#38bdf855}
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
+    <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
+  </div>
+  <main id="content"></main>
+
+<script>
+const MD = __MD__;
+const C0 = String.fromCharCode(1), C1 = String.fromCharCode(2);  // ตัวคั่นชั่วคราวสำหรับ inline code
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// จัดรูปแบบ inline: code, ลิงก์, ตัวหนา, ตัวเอียง  (rawHtml=true จะไม่ escape < >)
+function inline(t, rawHtml){
+  let s = rawHtml ? t : esc(t);
+  const codes = [];
+  s = s.replace(/CODEFENCE([^CODEFENCE]+)CODEFENCE/g, function(m,c){ codes.push(c); return C0+(codes.length-1)+C1; });
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+  s = s.replace(new RegExp(C0+'(\\d+)'+C1,'g'), function(m,i){ return '<code>'+codes[i]+'</code>'; });
+  return s;
+}
+
+function isTableSep(l){ return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.indexOf('-')>=0; }
+function splitRow(l){
+  let s = l.trim().replace(/^\|/,'').replace(/\|$/,'');
+  return s.split('|').map(function(c){ return c.trim(); });
+}
+
+function render(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  let html = '', i = 0, para = [];
+  const flush = function(){ if(para.length){ html += '<p>'+para.map(function(x){return inline(x);}).join('<br>')+'</p>'; para=[]; } };
+
+  while(i < lines.length){
+    let l = lines[i];
+
+    if(l.trim()===''){ flush(); i++; continue; }
+
+    // โค้ดบล็อก
+    if(/^CODEFENCE/.test(l.trim())){ flush(); let buf=[]; i++;
+      while(i<lines.length && !/^CODEFENCE/.test(lines[i].trim())){ buf.push(lines[i]); i++; }
+      i++; html += '<pre><code>'+esc(buf.join('\n'))+'</code></pre>'; continue; }
+
+    // หัวข้อ
+    let h = l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ flush(); const n=h[1].length; html += '<h'+n+'>'+inline(h[2])+'</h'+n+'>'; i++; continue; }
+
+    // เส้นคั่น (--- หรือ *** หรือ ___) บรรทัดที่มีแต่อักขระเหล่านี้
+    if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)){ flush(); html+='<hr>'; i++; continue; }
+
+    // ตาราง
+    if(l.trim().indexOf('|')===0 && i+1<lines.length && isTableSep(lines[i+1])){
+      flush();
+      const head = splitRow(l); i += 2;
+      let rows = [];
+      while(i<lines.length && lines[i].trim().indexOf('|')===0){ rows.push(splitRow(lines[i])); i++; }
+      let t='<table><thead><tr>'+head.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      for(const r of rows){ t+='<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>'; }
+      html += t+'</tbody></table>'; continue;
+    }
+
+    // blockquote
+    if(/^\s*>/.test(l)){ flush(); let buf=[];
+      while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+      html += '<blockquote>'+buf.map(function(x){return x.trim()===''?'':'<p>'+inline(x)+'</p>';}).join('')+'</blockquote>'; continue; }
+
+    // รายการ (รองรับย่อยตามการเยื้อง)
+    if(/^\s*([-*+]|\d+\.)\s+/.test(l)){ flush();
+      const block=[];
+      while(i<lines.length && (/^\s*([-*+]|\d+\.)\s+/.test(lines[i]) || (lines[i].trim()!=='' && /^\s{2,}\S/.test(lines[i]) && block.length))){
+        block.push(lines[i]); i++;
+      }
+      html += renderList(block); continue;
+    }
+
+    // HTML ดิบ (เช่น <details>)
+    if(/^\s*</.test(l)){ flush(); html += inline(l, true); i++; continue; }
+
+    para.push(l); i++;
+  }
+  flush();
+  return html;
+}
+
+// แปลงรายการที่มีการเยื้องเป็น <ul>/<ol> ซ้อนได้
+function renderList(block){
+  const items = [];
+  for(const raw of block){
+    const m = raw.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+    if(m){
+      items.push({ indent:m[1].length, ordered:/\d+\./.test(m[2]), text:m[3], used:false });
+    } else if(items.length){
+      items[items.length-1].text += '<br>'+inline(raw.trim());
+    }
+  }
+  if(!items.length) return '';
+  const baseIndent = Math.min.apply(null, items.map(function(n){return n.indent;}));
+  function build(parentIndent){
+    let out='', ordered=null, open=false;
+    for(let k=0;k<items.length;k++){
+      const n=items[k];
+      if(n.used) continue;
+      if(n.indent!==parentIndent) continue;
+      n.used=true;
+      if(!open){ ordered=n.ordered; out+='<'+(ordered?'ol':'ul')+'>'; open=true; }
+      // หาลูก (ระดับเยื้องมากกว่า) ที่อยู่ถัดไปก่อนจะกลับมาระดับเดิม
+      let childIndent=null;
+      for(let j=k+1;j<items.length;j++){
+        if(items[j].indent<=parentIndent) break;
+        if(!items[j].used){ childIndent=items[j].indent; break; }
+      }
+      let childHtml = (childIndent!==null) ? build(childIndent) : '';
+      out+='<li>'+inline(n.text)+childHtml+'</li>';
+    }
+    if(open) out+='</'+(ordered?'ol':'ul')+'>';
+    return out;
+  }
+  return build(baseIndent);
+}
+
+document.getElementById('content').innerHTML = render(MD);
+</script>
+</body>
+</html>
+'@
+
+# ใช้ backtick (`) เป็นตัวคั่น inline code — เลี่ยงปัญหา escape ใน PowerShell โดยใส่ทีหลัง
+$bt = [char]96
+$template = $template.Replace('CODEFENCE', $bt)
+
+# ใช้ .NET JSON serializer (เลี่ยงบั๊ก ConvertTo-Json กับสตริงหลายบรรทัดใน PowerShell 5.1)
+Add-Type -AssemblyName System.Web.Extensions
+$ser = New-Object System.Web.Script.Serialization.JavaScriptSerializer
+$ser.MaxJsonLength = [int]::MaxValue
+
+$mdFiles = Get-ChildItem -LiteralPath $root -Recurse -Filter '*.md'
+$count = 0
+foreach ($f in $mdFiles) {
+    $raw = Get-Content -LiteralPath $f.FullName -Raw -Encoding UTF8
+    if (-not $raw) { $raw = '' }
+    # ชื่อเรื่องจากหัวข้อ # แรก ไม่งั้นใช้ชื่อไฟล์
+    $titleLine = ($raw -split "`n" | Where-Object { $_ -match '^#\s' } | Select-Object -First 1)
+    $title = if ($titleLine) { ($titleLine -replace '^#\s+','').Trim() } else { $f.BaseName }
+    $title = ($title -replace '"','')
+
+    $mdJson = $ser.Serialize($raw)   # ได้ JS string ที่ปลอดภัย (escape < > & เป็น \uXXXX ด้วย)
+    $page = $template.Replace('__TITLE__', $title).Replace('__MD__', $mdJson)
+
+    $outPath = [System.IO.Path]::ChangeExtension($f.FullName, '.html')
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($outPath, $page, $utf8)
+    $count++
+}
+
+Write-Host "แปลงไฟล์ .md -> .html เรียบร้อย: $count ไฟล์" -ForegroundColor Green
+Write-Host "เปิดผ่าน หน้าแรก.html (เมนู 'อ่านสรุปเนื้อหา') หรือดับเบิลคลิกไฟล์ .html ในแต่ละโฟลเดอร์"

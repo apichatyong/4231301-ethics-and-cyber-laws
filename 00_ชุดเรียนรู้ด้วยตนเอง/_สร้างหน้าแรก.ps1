@@ -41,14 +41,33 @@ function Enc($relPath) {
     ($relPath -split '[\\/]' | ForEach-Object { [Uri]::EscapeDataString($_) }) -join '/'
 }
 
+function Pretty($baseName) {
+    # 01_สรุปเนื้อหา_PDPA -> สรุปเนื้อหา PDPA
+    ($baseName -replace '^\d+[_\-]', '' -replace '_', ' ').Trim()
+}
+
 $topicLinks = ''
 foreach ($t in $topics) {
     $dir = Join-Path $root $t.folder
     if (-not (Test-Path -LiteralPath $dir)) { continue }
-    # ไฟล์สรุปหลัก (01_*) ถ้ามี ไม่งั้นลิงก์ไปไฟล์แรก
-    $summary = Get-ChildItem -LiteralPath $dir -Filter '01_*.md' | Select-Object -First 1
-    $href = if ($summary) { Enc("$($t.folder)/$($summary.Name)") } else { Enc($t.folder) }
-    $topicLinks += "      <a class=""topic"" href=""$href"">$($t.name)</a>`n"
+    # เอกสารทุกไฟล์ในหัวข้อ (ลิงก์ไปเวอร์ชัน .html ที่อ่านสวย ถ้ามี ไม่งั้น .md)
+    $docs = Get-ChildItem -LiteralPath $dir -Filter '*.md' | Sort-Object Name
+    if (-not $docs) { continue }
+    $links = ''
+    foreach ($doc in $docs) {
+        $htmlVer = [System.IO.Path]::ChangeExtension($doc.FullName, '.html')
+        $target = if (Test-Path -LiteralPath $htmlVer) { [System.IO.Path]::GetFileName($htmlVer) } else { $doc.Name }
+        $href = Enc("$($t.folder)/$target")
+        $links += "          <a href=""$href"">$(Pretty $doc.BaseName)</a>`n"
+    }
+    $topicLinks += @"
+      <div class="tg">
+        <div class="tg-h">$($t.name)</div>
+        <div class="tg-links">
+$links        </div>
+      </div>
+
+"@
 }
 
 $html = @"
@@ -77,11 +96,14 @@ $html = @"
   .card .go{margin-top:16px;display:inline-block;background:var(--accent);color:#03263a;font-weight:700;
             border-radius:10px;padding:9px 16px;font-size:14px}
   .sect{width:min(720px,96vw);margin-top:34px}
-  .sect h2{font-size:16px;color:var(--muted);font-weight:600;margin:0 0 12px;text-align:center}
-  .topics{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .topic{background:#0b1220;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;
-         color:var(--txt);text-decoration:none;transition:.15s}
-  .topic:hover{border-color:var(--accent);color:var(--accent)}
+  .sect h2{font-size:16px;color:var(--muted);font-weight:600;margin:0 0 16px;text-align:center}
+  .topics{display:flex;flex-direction:column;gap:14px}
+  .tg{background:#0b1220;border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+  .tg-h{font-size:15px;font-weight:700;color:#bfe6fb;margin-bottom:9px}
+  .tg-links{display:flex;flex-wrap:wrap;gap:8px}
+  .tg-links a{background:#16263f;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13px;
+              color:var(--txt);text-decoration:none;transition:.15s}
+  .tg-links a:hover{border-color:var(--accent);color:var(--accent)}
   .foot{margin-top:36px;color:#64748b;font-size:12px;text-align:center;line-height:1.7;max-width:560px}
   .how{background:#0b122088;border:1px dashed var(--line);border-radius:12px;padding:14px 18px;margin-top:22px;
        width:min(720px,96vw);color:var(--muted);font-size:13px;line-height:1.7}
@@ -111,19 +133,19 @@ $html = @"
   </div>
 
   <div class="sect">
-    <h2>📖 อ่านสรุปเนื้อหาแต่ละหัวข้อ</h2>
+    <h2>📖 อ่านเนื้อหาแต่ละหัวข้อ (เปิดในเบราว์เซอร์ อ่านสวย)</h2>
     <div class="topics">
 $topicLinks    </div>
   </div>
 
   <div class="how">
     <b>💡 การอัปเดตเนื้อหา:</b> หากแก้ไขไฟล์ <b>.md</b> (สรุป/แฟลชการ์ด/ข้อสอบ) แล้ว ให้รันสคริปต์
-    <b>_สร้างแฟลชการ์ด.ps1</b> และ <b>_สร้างแบบทดสอบ.ps1</b> ใหม่ (คลิกขวา &gt; Run with PowerShell)
-    จากนั้นรัน <b>_สร้างหน้าแรก.ps1</b> เพื่อรีเฟรชตัวเลขบนหน้านี้
+    <b>_สร้างแฟลชการ์ด.ps1</b> · <b>_สร้างแบบทดสอบ.ps1</b> · <b>_สร้างหน้าอ่าน.ps1</b> ใหม่ (คลิกขวา &gt; Run with PowerShell)
+    จากนั้นรัน <b>_สร้างหน้าแรก.ps1</b> เพื่อรีเฟรชหน้านี้
   </div>
 
   <div class="foot">
-    ไฟล์สรุปเนื้อหาเป็นรูปแบบ Markdown (.md) — เปิดอ่านได้ดีที่สุดในโปรแกรมแก้ไขข้อความหรือ Obsidian<br>
+    เนื้อหาทั้งหมดแปลงเป็นหน้าเว็บอ่านง่าย (จากไฟล์ต้นฉบับ Markdown) · มีปุ่มพิมพ์/บันทึก PDF ในแต่ละหน้า<br>
     สร้างจากชุดเรียนรู้ด้วยตนเอง · ใช้งานออฟไลน์ 100%
   </div>
 </body>

@@ -23,11 +23,14 @@
   .card .go{margin-top:16px;display:inline-block;background:var(--accent);color:#03263a;font-weight:700;
             border-radius:10px;padding:9px 16px;font-size:14px}
   .sect{width:min(720px,96vw);margin-top:34px}
-  .sect h2{font-size:16px;color:var(--muted);font-weight:600;margin:0 0 12px;text-align:center}
-  .topics{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .topic{background:#0b1220;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;
-         color:var(--txt);text-decoration:none;transition:.15s}
-  .topic:hover{border-color:var(--accent);color:var(--accent)}
+  .sect h2{font-size:16px;color:var(--muted);font-weight:600;margin:0 0 16px;text-align:center}
+  .topics{display:flex;flex-direction:column;gap:14px}
+  .tg{background:#0b1220;border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+  .tg-h{font-size:15px;font-weight:700;color:#bfe6fb;margin-bottom:9px}
+  .tg-links{display:flex;flex-wrap:wrap;gap:8px}
+  .tg-links a{background:#16263f;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13px;
+              color:var(--txt);text-decoration:none;transition:.15s}
+  .tg-links a:hover{border-color:var(--accent);color:var(--accent)}
   .foot{margin-top:36px;color:#64748b;font-size:12px;text-align:center;line-height:1.7;max-width:560px}
   .how{background:#0b122088;border:1px dashed var(--line);border-radius:12px;padding:14px 18px;margin-top:22px;
        width:min(720px,96vw);color:var(--muted);font-size:13px;line-height:1.7}
@@ -57,25 +60,77 @@
   </div>
 
   <div class="sect">
-    <h2>📖 อ่านสรุปเนื้อหาแต่ละหัวข้อ</h2>
+    <h2>📖 อ่านเนื้อหาแต่ละหัวข้อ (เปิดในเบราว์เซอร์ อ่านสวย)</h2>
     <div class="topics">
-      <a class="topic" href="1_PDPA/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_PDPA.md">PDPA</a>
-      <a class="topic" href="2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C.md">พ.ร.บ.คอม / ไซเบอร์</a>
-      <a class="topic" href="3_%E0%B8%97%E0%B8%A3%E0%B8%B1%E0%B8%9E%E0%B8%A2%E0%B9%8C%E0%B8%AA%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_IP.md">ทรัพย์สินทางปัญญา</a>
-      <a class="topic" href="4_AI/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_AI.md">AI Law & Ethics</a>
-      <a class="topic" href="5_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C.md">ธุรกรรมอิเล็กทรอนิกส์</a>
-      <a class="topic" href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/01_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA%E0%B8%95%E0%B8%B2%E0%B8%A1%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%82%E0%B9%89%E0%B8%AD.md">คลังเคส & ข้อสอบรวม</a>
+      <div class="tg">
+        <div class="tg-h">PDPA</div>
+        <div class="tg-links">
+          <a href="1_PDPA/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_PDPA.html">สรุปเนื้อหา PDPA</a>
+          <a href="1_PDPA/02_%E0%B9%81%E0%B8%9F%E0%B8%A5%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C%E0%B8%94_PDPA.html">แฟลชการ์ด PDPA</a>
+          <a href="1_PDPA/03_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%9B%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%A2_PDPA.html">ข้อสอบปรนัย PDPA</a>
+          <a href="1_PDPA/04_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%AD%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B9%80%E0%B8%84%E0%B8%AA_PDPA.html">ข้อสอบอัตนัย เคส PDPA</a>
+          <a href="1_PDPA/05_PDPA_%E0%B8%A0%E0%B8%B2%E0%B8%84%E0%B8%9B%E0%B8%8F%E0%B8%B4%E0%B8%9A%E0%B8%B1%E0%B8%95%E0%B8%B4_Implementation.html">PDPA ภาคปฏิบัติ Implementation</a>
+          <a href="1_PDPA/06_Flowchart_5%E0%B8%82%E0%B8%B1%E0%B9%89%E0%B8%99%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%A7%E0%B8%B2%E0%B8%87%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%9A_PDPA.html">Flowchart 5ขั้นตอนวางระบบ PDPA</a>
+          <a href="1_PDPA/07_%E0%B8%AD%E0%B8%98%E0%B8%B4%E0%B8%9A%E0%B8%B2%E0%B8%A25%E0%B8%82%E0%B8%B1%E0%B9%89%E0%B8%99%E0%B8%95%E0%B8%AD%E0%B8%99_%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B8%AD%E0%B8%B2%E0%B8%88%E0%B8%B2%E0%B8%A3%E0%B8%A2%E0%B9%8C.html">อธิบาย5ขั้นตอน พร้อมตัวอย่างอาจารย์</a>
+          <a href="1_PDPA/08_%E0%B8%82%E0%B8%B1%E0%B9%89%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%885_%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%97%E0%B8%B3%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3_%E0%B9%80%E0%B8%88%E0%B8%B2%E0%B8%B0%E0%B8%A5%E0%B8%B6%E0%B8%81.html">ขั้นที่5 การทำเอกสาร เจาะลึก</a>
+          <a href="1_PDPA/09_%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3_PrivacyNotice_CoffeeConcepts.html">ตัวอย่างเอกสาร PrivacyNotice CoffeeConcepts</a>
+          <a href="1_PDPA/10_%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3_ConsentForm_CoffeeConcepts.html">ตัวอย่างเอกสาร ConsentForm CoffeeConcepts</a>
+          <a href="1_PDPA/11_%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3_ROPA_CoffeeConcepts.html">ตัวอย่างเอกสาร ROPA CoffeeConcepts</a>
+        </div>
+      </div>
+      <div class="tg">
+        <div class="tg-h">พ.ร.บ.คอม / ไซเบอร์</div>
+        <div class="tg-links">
+          <a href="2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C.html">สรุปเนื้อหา พรบคอม-ไซเบอร์</a>
+          <a href="2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C/02_%E0%B9%81%E0%B8%9F%E0%B8%A5%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C%E0%B8%94_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C.html">แฟลชการ์ด พรบคอม-ไซเบอร์</a>
+          <a href="2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C/03_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%9B%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%A2%2B%E0%B8%AD%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%84%E0%B8%AD%E0%B8%A1-%E0%B9%84%E0%B8%8B%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C.html">ข้อสอบปรนัย+อัตนัย พรบคอม-ไซเบอร์</a>
+        </div>
+      </div>
+      <div class="tg">
+        <div class="tg-h">ทรัพย์สินทางปัญญา</div>
+        <div class="tg-links">
+          <a href="3_%E0%B8%97%E0%B8%A3%E0%B8%B1%E0%B8%9E%E0%B8%A2%E0%B9%8C%E0%B8%AA%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_IP.html">สรุปเนื้อหา IP</a>
+          <a href="3_%E0%B8%97%E0%B8%A3%E0%B8%B1%E0%B8%9E%E0%B8%A2%E0%B9%8C%E0%B8%AA%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2/02_%E0%B9%81%E0%B8%9F%E0%B8%A5%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C%E0%B8%94_IP.html">แฟลชการ์ด IP</a>
+          <a href="3_%E0%B8%97%E0%B8%A3%E0%B8%B1%E0%B8%9E%E0%B8%A2%E0%B9%8C%E0%B8%AA%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2/03_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%9B%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%A2%2B%E0%B8%AD%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B8%B1%E0%B8%A2_IP.html">ข้อสอบปรนัย+อัตนัย IP</a>
+        </div>
+      </div>
+      <div class="tg">
+        <div class="tg-h">AI Law & Ethics</div>
+        <div class="tg-links">
+          <a href="4_AI/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_AI.html">สรุปเนื้อหา AI</a>
+          <a href="4_AI/02_%E0%B9%81%E0%B8%9F%E0%B8%A5%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C%E0%B8%94_AI.html">แฟลชการ์ด AI</a>
+          <a href="4_AI/03_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%9B%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%A2%2B%E0%B8%AD%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B8%B1%E0%B8%A2_AI.html">ข้อสอบปรนัย+อัตนัย AI</a>
+        </div>
+      </div>
+      <div class="tg">
+        <div class="tg-h">ธุรกรรมอิเล็กทรอนิกส์</div>
+        <div class="tg-links">
+          <a href="5_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C/01_%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B2_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C.html">สรุปเนื้อหา ธุรกรรมอิเล็กทรอนิกส์</a>
+          <a href="5_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C/02_%E0%B9%81%E0%B8%9F%E0%B8%A5%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C%E0%B8%94%2B%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A_%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AD%E0%B8%B4%E0%B9%80%E0%B8%A5%E0%B9%87%E0%B8%81%E0%B8%97%E0%B8%A3%E0%B8%AD%E0%B8%99%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C.html">แฟลชการ์ด+ข้อสอบ ธุรกรรมอิเล็กทรอนิกส์</a>
+        </div>
+      </div>
+      <div class="tg">
+        <div class="tg-h">คลังเคส & ข้อสอบรวม</div>
+        <div class="tg-links">
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/01_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA%E0%B8%95%E0%B8%B2%E0%B8%A1%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%82%E0%B9%89%E0%B8%AD.html">คลังเคสตามหัวข้อ</a>
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/02_%E0%B9%80%E0%B8%84%E0%B8%AA%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A1%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%82%E0%B9%89%E0%B8%AD.html">เคสข้ามหัวข้อ</a>
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/03_%E0%B8%95%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%A2%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1-%E0%B8%81%E0%B8%8E%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%A2_%E0%B9%81%E0%B8%9C%E0%B9%88%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B8%A7%E0%B8%88%E0%B8%9A.html">ตารางจริยธรรม-กฎหมาย แผ่นเดียวจบ</a>
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/04_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%88%E0%B8%B3%E0%B8%A5%E0%B8%AD%E0%B8%87_60%E0%B8%84%E0%B8%B0%E0%B9%81%E0%B8%99%E0%B8%99.html">ข้อสอบจำลอง 60คะแนน</a>
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/05_%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%A2%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%88%E0%B8%B3%E0%B8%A5%E0%B8%AD%E0%B8%87.html">เฉลยข้อสอบจำลอง</a>
+          <a href="6_%E0%B8%84%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%84%E0%B8%AA_%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%A1/06_%E0%B8%95%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%9A%E0%B8%97%E0%B8%A2%E0%B8%B8%E0%B8%84%E0%B8%AA%E0%B8%A1%E0%B8%B1%E0%B8%A2_%E0%B8%81%E0%B8%8E%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%A2%E0%B8%94%E0%B8%B4%E0%B8%88%E0%B8%B4%E0%B8%97%E0%B8%B1%E0%B8%A54%E0%B8%95%E0%B8%B1%E0%B8%A7.html">ตารางบริบทยุคสมัย กฎหมายดิจิทัล4ตัว</a>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="how">
     <b>💡 การอัปเดตเนื้อหา:</b> หากแก้ไขไฟล์ <b>.md</b> (สรุป/แฟลชการ์ด/ข้อสอบ) แล้ว ให้รันสคริปต์
-    <b>_สร้างแฟลชการ์ด.ps1</b> และ <b>_สร้างแบบทดสอบ.ps1</b> ใหม่ (คลิกขวา &gt; Run with PowerShell)
-    จากนั้นรัน <b>_สร้างหน้าแรก.ps1</b> เพื่อรีเฟรชตัวเลขบนหน้านี้
+    <b>_สร้างแฟลชการ์ด.ps1</b> · <b>_สร้างแบบทดสอบ.ps1</b> · <b>_สร้างหน้าอ่าน.ps1</b> ใหม่ (คลิกขวา &gt; Run with PowerShell)
+    จากนั้นรัน <b>_สร้างหน้าแรก.ps1</b> เพื่อรีเฟรชหน้านี้
   </div>
 
   <div class="foot">
-    ไฟล์สรุปเนื้อหาเป็นรูปแบบ Markdown (.md) — เปิดอ่านได้ดีที่สุดในโปรแกรมแก้ไขข้อความหรือ Obsidian<br>
+    เนื้อหาทั้งหมดแปลงเป็นหน้าเว็บอ่านง่าย (จากไฟล์ต้นฉบับ Markdown) · มีปุ่มพิมพ์/บันทึก PDF ในแต่ละหน้า<br>
     สร้างจากชุดเรียนรู้ด้วยตนเอง · ใช้งานออฟไลน์ 100%
   </div>
 </body>

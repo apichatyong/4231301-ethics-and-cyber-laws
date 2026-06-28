@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔑 แฟลชการ์ด PDPA (ถาม–ตอบ)</title>
+<style>
+  :root{--bg:#0f172a;--paper:#111c33;--txt:#e6edf6;--muted:#9fb0c7;--accent:#38bdf8;--line:#2b3a52;--hl:#fcd34d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;line-height:1.75}
+  .topnav{position:sticky;top:0;background:#0b1322ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+          padding:10px 16px;display:flex;gap:14px;align-items:center;z-index:50;font-size:14px}
+  .topnav a{color:var(--muted);text-decoration:none;padding:5px 11px;border:1px solid var(--line);border-radius:999px}
+  .topnav a:hover{color:var(--accent);border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:30px 22px 80px}
+  h1,h2,h3,h4{line-height:1.35;margin:1.5em 0 .6em;font-weight:700}
+  h1{font-size:27px;border-bottom:2px solid var(--accent);padding-bottom:.3em;margin-top:.3em}
+  h2{font-size:22px;color:#bfe6fb;border-bottom:1px solid var(--line);padding-bottom:.25em}
+  h3{font-size:18px;color:#a7d8f0}
+  h4{font-size:16px;color:var(--muted)}
+  p{margin:.7em 0}
+  strong{color:#fff;font-weight:700;background:linear-gradient(transparent 62%,#fcd34d33 62%)}
+  em{color:#fbcfe8;font-style:italic}
+  code{background:#0b1322;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.92em;color:#7dd3fc;
+       font-family:"Cascadia Code",Consolas,monospace}
+  pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{border:none;padding:0;background:none}
+  a{color:var(--accent)}
+  ul,ol{margin:.5em 0 .9em;padding-left:1.6em}
+  li{margin:.3em 0}
+  ul ul,ol ol,ul ol,ol ul{margin:.2em 0}
+  blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--accent);background:#0b132288;border-radius:0 8px 8px 0;color:#cdd9e8}
+  blockquote p{margin:.3em 0}
+  hr{border:none;border-top:1px dashed var(--line);margin:1.8em 0}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#16263f;color:#bfe6fb;font-weight:700}
+  tr:nth-child(even) td{background:#0f1c30}
+  details{background:#0b1322;border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:.7em 0}
+  summary{cursor:pointer;color:var(--accent);font-weight:600}
+  ::selection{background:#38bdf855}
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
+    <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
+  </div>
+  <main id="content"></main>
+
+<script>
+const MD = "# 🔑 แฟลชการ์ด PDPA (ถาม–ตอบ)\n### วิธีใช้: ปิดฝั่งขวา (คำตอบ) แล้วตอบในใจ/เขียน → เปิดเช็ค ทำซ้ำจนตอบได้ทุกใบ\n\n\u003e เน้นตัวเลขมาตรา + ตัวเลขสำคัญ (ออกปรนัยบ่อย)\n\n| # | คำถาม | คำตอบ |\n|---|---|---|\n| 1 | PDPA คือ พ.ร.บ. อะไร ปีใด | พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล **พ.ศ. 2562** |\n| 2 | บังคับใช้เต็มรูปแบบเมื่อใด | **1 มิถุนายน 2565** |\n| 3 | หน่วยงานกำกับ PDPA | สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (**สคส./PDPC**) |\n| 4 | มาตราที่นิยาม \"ข้อมูลส่วนบุคคล\" | **มาตรา 6** |\n| 5 | นิยามข้อมูลส่วนบุคคล | ข้อมูลที่ระบุตัวบุคคลได้ ทางตรงหรือทางอ้อม **ไม่รวมผู้ถึงแก่กรรม** |\n| 6 | มาตรา \"ข้อยกเว้นไม่ใช้บังคับ\" | **มาตรา 4** (6 กรณี) |\n| 7 | มาตราขอบเขตบังคับใช้ (ใน/นอกประเทศ) | **มาตรา 5** |\n| 8 | DC ย่อมาจาก / แปลว่า | Data Controller = ผู้มีอำนาจ **ตัดสินใจ** เก็บ/ใช้/เปิดเผยข้อมูล |\n| 9 | DP ย่อมาจาก / แปลว่า | Data Processor = ผู้ดำเนินการ **ตามคำสั่ง** DC |\n| 10 | DPO คือใคร อยู่มาตราใด | เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (**ม.41–42**) |\n| 11 | PDPA มีกี่ฐานการประมวลผล | **7 ฐาน** (Consent ม.19 + 6 ข้อยกเว้น ม.24) |\n| 12 | ฐานความยินยอม อยู่มาตราใด | **มาตรา 19** |\n| 13 | ฐานสัญญา (Contract) | **ม.24(3)** |\n| 14 | ฐานหน้าที่ตามกฎหมาย (Legal Obligation) | **ม.24(6)** |\n| 15 | ฐานระงับอันตรายต่อชีวิต (Vital Interest) | **ม.24(2)** [Sensitive: ม.26(1)] |\n| 16 | ฐานภารกิจรัฐ (Public Task) | **ม.24(4)** |\n| 17 | ฐานประโยชน์โดยชอบด้วยกฎหมาย (Legitimate Interest) | **ม.24(5)** + ต้องทำ Balancing Test |\n| 18 | ฐานวิจัย/สถิติ (Research) | **ม.24(1)** |\n| 19 | กล้องวงจรปิด (CCTV) ใช้ฐานใด | ฐานประโยชน์โดยชอบด้วยกฎหมาย **ม.24(5)** |\n| 20 | ถอนความยินยอมได้เมื่อใด มาตราใด | **เมื่อใดก็ได้** (ม.19 ว.5) |\n| 21 | ความยินยอมต้องทำรูปแบบใด | ชัดแจ้ง เป็นหนังสือ/อิเล็กทรอนิกส์ แยกส่วน ไม่หลอกลวง |\n| 22 | ผู้เยาว์อายุเท่าใดต้องให้ผู้ปกครองยินยอมเสมอ | **ไม่เกิน 10 ปี** |\n| 23 | ข้อมูลอ่อนไหว (Sensitive) อยู่มาตราใด | **มาตรา 26** |\n| 24 | ยกตัวอย่างข้อมูลอ่อนไหว 5 อย่าง | เชื้อชาติ, ศาสนา, สุขภาพ, พฤติกรรมทางเพศ, ประวัติอาชญากรรม, พันธุกรรม, ชีวภาพ, สหภาพแรงงาน, ความเห็นการเมือง, ความพิการ |\n| 25 | Sensitive Data ต้องขอความยินยอมแบบใด | **ความยินยอมโดยชัดแจ้ง (Explicit Consent)** |\n| 26 | สิทธิเข้าถึง \u0026 ขอสำเนา | Right of Access — **ม.30** |\n| 27 | สิทธิโอนย้ายข้อมูล | Data Portability — **ม.31** |\n| 28 | สิทธิคัดค้าน | Right to Object — **ม.32** |\n| 29 | สิทธิขอลบ/ทำลาย | Right to Erasure / to be forgotten — **ม.33** |\n| 30 | สิทธิระงับการใช้ | Right to Restriction — **ม.34** |\n| 31 | สิทธิขอแก้ไขให้ถูกต้อง | Right to Rectification — **ม.36** |\n| 32 | สิทธิได้รับการแจ้ง / Privacy Notice | **ม.23** |\n| 33 | หน้าที่ DC อยู่มาตราใด | **มาตรา 37** |\n| 34 | มาตรการความปลอดภัยครอบคลุม 3 ด้านอะไร | **CIA** = Confidentiality, Integrity, Availability |\n| 35 | ต้องแจ้งเหตุละเมิดข้อมูลต่อ สคส. ภายในกี่ชั่วโมง | **72 ชั่วโมง** นับแต่ทราบ (ม.37(4)) |\n| 36 | DP แจ้งเหตุละเมิดต่อใคร | ต่อ **DC** (ไม่ใช่ สคส.) — ม.40 |\n| 37 | ROPA คืออะไร มาตราใด | Record of Processing Activities — บันทึกรายการประมวลผล (**ม.39**) |\n| 38 | หน้าที่ DP อยู่มาตราใด | **มาตรา 40** |\n| 39 | การโอนข้อมูลไปต่างประเทศ มาตราใด | **มาตรา 28** — ปลายทางต้องมีมาตรฐานคุ้มครองเพียงพอ |\n| 40 | โทษอาญาสูงสุดของ PDPA | จำคุก ≤ 1 ปี และ/หรือ ปรับ ≤ **1,000,000 บาท** |\n| 41 | โทษทางปกครองสูงสุด | ปรับ ≤ **5,000,000 บาท** |\n| 42 | ค่าสินไหมเพื่อการลงโทษ สูงสุดกี่เท่า | ไม่เกิน **2 เท่า** ของค่าสินไหมที่แท้จริง (ม.77–78) |\n| 43 | Anonymization ต่างจาก Pseudonymization อย่างไร | Anonymization = ระบุตัวไม่ได้ **พ้น**จากเป็นข้อมูลส่วนบุคคล; Pseudonymization = แฝงข้อมูล **ยังเป็น**ข้อมูลส่วนบุคคล |\n| 44 | ฐานรัฐธรรมนูญของสิทธิความเป็นส่วนตัว | รัฐธรรมนูญ 2560 **มาตรา 32** |\n| 45 | เป้าหมายสูงสุดเชิงจริยธรรมของ PDPA | สร้าง **ความไว้วางใจ (Trust)** ในสังคม/เศรษฐกิจดิจิทัล |\n| 46 | 5 เสาหลักจริยธรรม PDPA | ศักดิ์ศรีมนุษย์, ความเป็นส่วนตัว, การกำหนดเจตนาตนเอง, ความเป็นธรรม/ยุติธรรม, ความรับผิดชอบ/โปร่งใส |\n| 47 | กฎหมายต่างชาติที่เป็นต้นแบบ PDPA | GDPR (EU), PDPA 2012 (สิงคโปร์) |\n| 48 | บทเฉพาะกาลเรื่องข้อมูลเดิม | **มาตรา 95** |\n\n---\n\n### ⚡ การ์ดดักหลุมพราง (ข้อสอบชอบหลอก)\n- ❌ \"ต้องขอความยินยอมเสมอ\" → **ผิด** มี 6 ฐานอื่นที่ไม่ต้องขอ\n- ❌ \"ข้อมูลคนตายเป็นข้อมูลส่วนบุคคล\" → **ผิด** ม.6 ไม่รวมผู้ถึงแก่กรรม\n- ❌ \"แจ้งเหตุละเมิดภายใน 24 ชม.\" → **ผิด** คือ **72 ชม.**\n- ❌ \"DP แจ้งเหตุละเมิดต่อ สคส.\" → **ผิด** DP แจ้งต่อ **DC**\n- ❌ \"ฐานสัญญาใช้กับข้อมูลอ่อนไหวได้\" → **ผิด** Sensitive ต้องใช้ฐาน ม.26\n";
+const C0 = String.fromCharCode(1), C1 = String.fromCharCode(2);  // ตัวคั่นชั่วคราวสำหรับ inline code
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// จัดรูปแบบ inline: code, ลิงก์, ตัวหนา, ตัวเอียง  (rawHtml=true จะไม่ escape < >)
+function inline(t, rawHtml){
+  let s = rawHtml ? t : esc(t);
+  const codes = [];
+  s = s.replace(/`([^`]+)`/g, function(m,c){ codes.push(c); return C0+(codes.length-1)+C1; });
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+  s = s.replace(new RegExp(C0+'(\\d+)'+C1,'g'), function(m,i){ return '<code>'+codes[i]+'</code>'; });
+  return s;
+}
+
+function isTableSep(l){ return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.indexOf('-')>=0; }
+function splitRow(l){
+  let s = l.trim().replace(/^\|/,'').replace(/\|$/,'');
+  return s.split('|').map(function(c){ return c.trim(); });
+}
+
+function render(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  let html = '', i = 0, para = [];
+  const flush = function(){ if(para.length){ html += '<p>'+para.map(function(x){return inline(x);}).join('<br>')+'</p>'; para=[]; } };
+
+  while(i < lines.length){
+    let l = lines[i];
+
+    if(l.trim()===''){ flush(); i++; continue; }
+
+    // โค้ดบล็อก
+    if(/^`/.test(l.trim())){ flush(); let buf=[]; i++;
+      while(i<lines.length && !/^`/.test(lines[i].trim())){ buf.push(lines[i]); i++; }
+      i++; html += '<pre><code>'+esc(buf.join('\n'))+'</code></pre>'; continue; }
+
+    // หัวข้อ
+    let h = l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ flush(); const n=h[1].length; html += '<h'+n+'>'+inline(h[2])+'</h'+n+'>'; i++; continue; }
+
+    // เส้นคั่น (--- หรือ *** หรือ ___) บรรทัดที่มีแต่อักขระเหล่านี้
+    if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)){ flush(); html+='<hr>'; i++; continue; }
+
+    // ตาราง
+    if(l.trim().indexOf('|')===0 && i+1<lines.length && isTableSep(lines[i+1])){
+      flush();
+      const head = splitRow(l); i += 2;
+      let rows = [];
+      while(i<lines.length && lines[i].trim().indexOf('|')===0){ rows.push(splitRow(lines[i])); i++; }
+      let t='<table><thead><tr>'+head.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      for(const r of rows){ t+='<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>'; }
+      html += t+'</tbody></table>'; continue;
+    }
+
+    // blockquote
+    if(/^\s*>/.test(l)){ flush(); let buf=[];
+      while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+      html += '<blockquote>'+buf.map(function(x){return x.trim()===''?'':'<p>'+inline(x)+'</p>';}).join('')+'</blockquote>'; continue; }
+
+    // รายการ (รองรับย่อยตามการเยื้อง)
+    if(/^\s*([-*+]|\d+\.)\s+/.test(l)){ flush();
+      const block=[];
+      while(i<lines.length && (/^\s*([-*+]|\d+\.)\s+/.test(lines[i]) || (lines[i].trim()!=='' && /^\s{2,}\S/.test(lines[i]) && block.length))){
+        block.push(lines[i]); i++;
+      }
+      html += renderList(block); continue;
+    }
+
+    // HTML ดิบ (เช่น <details>)
+    if(/^\s*</.test(l)){ flush(); html += inline(l, true); i++; continue; }
+
+    para.push(l); i++;
+  }
+  flush();
+  return html;
+}
+
+// แปลงรายการที่มีการเยื้องเป็น <ul>/<ol> ซ้อนได้
+function renderList(block){
+  const items = [];
+  for(const raw of block){
+    const m = raw.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+    if(m){
+      items.push({ indent:m[1].length, ordered:/\d+\./.test(m[2]), text:m[3], used:false });
+    } else if(items.length){
+      items[items.length-1].text += '<br>'+inline(raw.trim());
+    }
+  }
+  if(!items.length) return '';
+  const baseIndent = Math.min.apply(null, items.map(function(n){return n.indent;}));
+  function build(parentIndent){
+    let out='', ordered=null, open=false;
+    for(let k=0;k<items.length;k++){
+      const n=items[k];
+      if(n.used) continue;
+      if(n.indent!==parentIndent) continue;
+      n.used=true;
+      if(!open){ ordered=n.ordered; out+='<'+(ordered?'ol':'ul')+'>'; open=true; }
+      // หาลูก (ระดับเยื้องมากกว่า) ที่อยู่ถัดไปก่อนจะกลับมาระดับเดิม
+      let childIndent=null;
+      for(let j=k+1;j<items.length;j++){
+        if(items[j].indent<=parentIndent) break;
+        if(!items[j].used){ childIndent=items[j].indent; break; }
+      }
+      let childHtml = (childIndent!==null) ? build(childIndent) : '';
+      out+='<li>'+inline(n.text)+childHtml+'</li>';
+    }
+    if(open) out+='</'+(ordered?'ol':'ul')+'>';
+    return out;
+  }
+  return build(baseIndent);
+}
+
+document.getElementById('content').innerHTML = render(MD);
+</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📂 ขั้นที่ 5 เจาะลึก — การจัดทำเอกสาร/เครื่องมือปิดช่องว่าง</title>
+<style>
+  :root{--bg:#0f172a;--paper:#111c33;--txt:#e6edf6;--muted:#9fb0c7;--accent:#38bdf8;--line:#2b3a52;--hl:#fcd34d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;line-height:1.75}
+  .topnav{position:sticky;top:0;background:#0b1322ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+          padding:10px 16px;display:flex;gap:14px;align-items:center;z-index:50;font-size:14px}
+  .topnav a{color:var(--muted);text-decoration:none;padding:5px 11px;border:1px solid var(--line);border-radius:999px}
+  .topnav a:hover{color:var(--accent);border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:30px 22px 80px}
+  h1,h2,h3,h4{line-height:1.35;margin:1.5em 0 .6em;font-weight:700}
+  h1{font-size:27px;border-bottom:2px solid var(--accent);padding-bottom:.3em;margin-top:.3em}
+  h2{font-size:22px;color:#bfe6fb;border-bottom:1px solid var(--line);padding-bottom:.25em}
+  h3{font-size:18px;color:#a7d8f0}
+  h4{font-size:16px;color:var(--muted)}
+  p{margin:.7em 0}
+  strong{color:#fff;font-weight:700;background:linear-gradient(transparent 62%,#fcd34d33 62%)}
+  em{color:#fbcfe8;font-style:italic}
+  code{background:#0b1322;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.92em;color:#7dd3fc;
+       font-family:"Cascadia Code",Consolas,monospace}
+  pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{border:none;padding:0;background:none}
+  a{color:var(--accent)}
+  ul,ol{margin:.5em 0 .9em;padding-left:1.6em}
+  li{margin:.3em 0}
+  ul ul,ol ol,ul ol,ol ul{margin:.2em 0}
+  blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--accent);background:#0b132288;border-radius:0 8px 8px 0;color:#cdd9e8}
+  blockquote p{margin:.3em 0}
+  hr{border:none;border-top:1px dashed var(--line);margin:1.8em 0}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#16263f;color:#bfe6fb;font-weight:700}
+  tr:nth-child(even) td{background:#0f1c30}
+  details{background:#0b1322;border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:.7em 0}
+  summary{cursor:pointer;color:var(--accent);font-weight:600}
+  ::selection{background:#38bdf855}
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
+    <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
+  </div>
+  <main id="content"></main>
+
+<script>
+const MD = "# 📂 ขั้นที่ 5 เจาะลึก — การจัดทำเอกสาร/เครื่องมือปิดช่องว่าง\n### \"Prepare the Necessary Tools\" | จาก Workshop คาบ 3 (อ.กิตติศักดิ์) ใช้ตัวอย่าง Coffee Concepts/Starbucks\n\n\u003e ขั้นที่ 5 คือการ \"ลงมือสร้างเอกสาร\" เพื่อปิดช่องว่าง (Gap) ที่เจอในขั้นที่ 4\n\u003e หลักคิด: เจอช่องว่างอะไร → ทำเอกสาร/มาตรการตัวนั้นมาปิด\n\n---\n\n## 📌 ภาพรวม: เอกสาร 7 ตัวที่ต้องทำ\n\n| # | เอกสาร | ปิดช่องว่างเรื่อง |\n|---|---|---|\n| 1 | Privacy Notice / Privacy Policy | ความโปร่งใส (หน้าที่แจ้ง ม.23) |\n| 2 | Consent Form | ฐานความยินยอม (ม.19) |\n| 3 | แบบคำร้องขอใช้สิทธิ (DSAR Form) | รองรับสิทธิเจ้าของข้อมูล (ม.30–36) |\n| 4 | DPA / Data Sharing Agreement | การส่งข้อมูลออกนอกองค์กร |\n| 5 | ROPA | บันทึกรายการประมวลผล (ม.39) |\n| 6 | Retention Policy | เก็บเท่าที่จำเป็น/ลบเมื่อหมดความจำเป็น |\n| 7 | แผนรับมือเหตุละเมิด + มาตรการ Security | หน้าที่ DC (ม.37) |\n\n---\n\n## 1️⃣ Privacy Notice (ประกาศความเป็นส่วนตัว)\n\n**คืออะไร:** การ **ประกาศ**ให้เจ้าของข้อมูล (ลูกค้า/พนักงาน/คู่ค้า) ทราบว่าองค์กรเก็บ-ใช้-เปิดเผยข้อมูลของเขาอย่างไร — เป็นการทำตาม **\"หน้าที่แจ้ง\" ตาม ม.23**\n\n**ต้องประกาศที่ไหน:** ที่ ๆ เจ้าของข้อมูลเข้าถึงได้ง่าย (เช่น หน้าเว็บไซต์) ภาษาชัดเจน ครอบคลุมการใช้ข้อมูลทั้งองค์กร\n\n**เนื้อหาที่ต้องมี (อาจารย์ระบุ 8 อย่าง):**\n1. วัตถุประสงค์การใช้ข้อมูล + **ฐานกฎหมายที่รองรับ**\n2. ประเภทของข้อมูลที่เก็บ/ใช้/เปิดเผย\n3. แหล่งที่มาของข้อมูล\n4. ระยะเวลาในการจัดเก็บ\n5. การส่งต่อไปหน่วยงานภายนอก/ต่างประเทศ\n6. มาตรการรักษาความปลอดภัย\n7. สิทธิของเจ้าของข้อมูล\n8. ช่องทางการติดต่อ\n\n**📍 ตัวอย่างที่อาจารย์ให้:**\n\u003e - **Starbucks Privacy Notice** → `starbucks.co.th/th/online-policies/privacy-notice/`\n\u003e - **Starbucks Employee Privacy** → `starbucks.co.th/th/employee-privacy-notice/`\n\u003e (สังเกตว่ามีแยก \"ของลูกค้า\" กับ \"ของพนักงาน\" คนละฉบับ)\n\n---\n\n## 2️⃣ Consent Form (แบบขอความยินยอม)\n\n**คืออะไร:** เอกสาร/ช่องทางขอ \"ความยินยอม\" ใช้เฉพาะกิจกรรมที่ **ต้องอาศัยฐานความยินยอม** (ไม่ใช่ทุกกิจกรรม!)\n\n**ใช้เมื่อไหร่ (อาจารย์ยกตัวอย่างกิจกรรมที่ต้องขอ):**\n- การใช้ข้อมูลเพื่อ **การตลาด**\n- การใช้ข้อมูลเพื่อ **วิเคราะห์พฤติกรรมการใช้บริการ**\n- การเก็บ **ข้อมูลอ่อนไหว (Sensitive Data)**\n\n**หลักสำคัญที่อาจารย์เน้น:**\n- ต้อง **แยกช่องยินยอมออกจากเงื่อนไขการใช้บริการ/นโยบายความเป็นส่วนตัว** อย่างชัดเจน\n- ต้องมีวิธี **แยกแยะ**ระหว่างคนที่ \"ให้\" กับ \"ไม่ให้\" ความยินยอม + เก็บหลักฐานการยินยอม\n\n**📍 ตัวอย่างที่อาจารย์ให้:**\n\u003e หน้าสมัครสมาชิกเว็บไซต์ → มีช่องติ๊ก **\"ยินยอมรับข่าวสาร/โปรโมชั่น\"** แยกต่างหากจากช่อง \"ยอมรับเงื่อนไขการใช้บริการ\" — ช่องนี้แหละคือ Consent\n\n---\n\n## 3️⃣ แบบคำร้องขอใช้สิทธิ (DSAR Form)\n\n**คืออะไร:** ช่องทาง/ฟอร์มให้เจ้าของข้อมูลยื่นขอใช้สิทธิ ม.30–36 (ขอเข้าถึง/แก้ไข/ลบ/คัดค้าน ฯลฯ) + กระบวนการส่งคำร้องไปยังฝ่ายที่เกี่ยวข้องเพื่อตอบสนอง\n\n**📍 ตัวอย่างที่อาจารย์ให้ (ฟอร์มจริงของ Coffee Concepts):**\n\u003e **\"คำร้องขอใช้สิทธิของเจ้าของข้อมูลส่วนบุคคล\"** ประกอบด้วย:\n\u003e - ข้อมูลผู้ยื่นคำร้อง (ชื่อ/ที่อยู่/เบอร์/อีเมล)\n\u003e - ช่องระบุว่ายื่น **\"ในฐานะเจ้าของข้อมูล\"** หรือ **\"เป็นตัวแทน\"**\n\u003e - เอกสารแนบพิสูจน์ตัวตน: **สำเนาบัตรประชาชน** (คนไทย) / สำเนาหนังสือเดินทาง (ต่างชาติ)\n\u003e - กรณีตัวแทน: ต้องมี **หนังสือมอบอำนาจ**\n\u003e - บริษัทสงวนสิทธิ์ขอเอกสารเพิ่ม/ปฏิเสธหากพิสูจน์ตัวตนไม่ได้\n\n---\n\n## 4️⃣ DPA / Data Sharing Agreement\n\n**คืออะไร:** สัญญาที่ใช้ตอน **ส่งข้อมูลส่วนบุคคลออกนอกองค์กร** (ให้ outsource/คู่ค้า/ผู้รับฝากข้อมูล)\n\n**DPA (Data Processing Agreement):**\n- ใช้เมื่อส่งให้ผู้ที่ทำ **ตามคำสั่งเรา** → เรา = DC, อีกฝ่าย = DP\n- อาจารย์เปรียบว่า \"คล้าย **NDA** แต่เน้นคุ้มครองข้อมูลส่วนบุคคล\"\n- **เนื้อหาขั้นต่ำ:** วัตถุประสงค์ส่งต่อ · ประเภทข้อมูล · เงื่อนไขประมวลผล · ระยะเวลาเก็บ · มาตรฐานความปลอดภัย · **ความรับผิดหากข้อมูลรั่ว**\n- ควรฝังไว้ในกระบวนการ **จัดซื้อจัดจ้าง** ทุกครั้งที่ต้องส่งข้อมูลออก\n\n**Data Sharing Agreement:**\n- ใช้เมื่อ **ทั้งสองฝ่ายแลกเปลี่ยน/ใช้ข้อมูลร่วมกัน** → **ทั้งคู่เป็น DC**\n\n**📍 ตัวอย่างที่อาจารย์ให้:** สัญญา DPA ตอนส่งข้อมูลพนักงานให้บริษัท **Payroll** จ่ายเงินเดือน (Payroll = DP)\n\n---\n\n## 5️⃣ ROPA (Record of Processing Activities)\n\n**คืออะไร:** บันทึกรายการประมวลผลข้อมูลทั้งองค์กร (ม.39) — เกิดตั้งแต่ขั้นที่ 3 แล้วใช้ต่อเป็นเอกสารถาวร\n\n**📍 ตัวอย่างที่อาจารย์ให้:** ไฟล์ Excel `Coffee Concepts - Record of Processing Activities_07.11.2025.xlsb`\n\n---\n\n## 6️⃣ Retention Policy + 7️⃣ แผนรับมือเหตุละเมิด \u0026 มาตรการ Security\n\n- **Retention Policy:** กำหนดว่าข้อมูลแต่ละประเภทเก็บนานเท่าใดแล้วลบ (เช่น CCTV = 30 วัน)\n- **แผนรับมือเหตุละเมิด:** ขั้นตอนเมื่อข้อมูลรั่ว → แจ้ง สคส. ภายใน **72 ชม.** + เยียวยา (ม.37)\n- **มาตรการ Security:** ครอบคลุม CIA (Confidentiality/Integrity/Availability) เช่น กำหนดสิทธิเข้าถึง, สำรองข้อมูล\n\n**📍 ตัวอย่างที่อาจารย์ให้ (ป้าย CCTV ของ Coffee Concepts Retail):**\n\u003e ระบุ: ผู้ควบคุมข้อมูล (บริษัทฯ) + วัตถุประสงค์ + **ระยะเวลาเก็บ 30 วัน** + QR code ลิงก์ไป Privacy Notice\n\u003e → เป็นตัวอย่างที่รวม \"หน้าที่แจ้ง + Retention + ช่องทางสิทธิ\" ไว้ในป้ายเดียว\n\n---\n\n## ❓ จุดออกสอบของขั้นที่ 5\n\n1. เอกสารที่ \"ประกาศวัตถุประสงค์การเก็บข้อมูล\" = **Privacy Notice**\n2. กิจกรรมที่ต้องมี Consent = **การตลาด / วิเคราะห์พฤติกรรม / ข้อมูลอ่อนไหว**\n3. ส่งข้อมูลให้ผู้ทำตามคำสั่ง = ทำ **DPA** (เรา=DC, เขา=DP)\n4. ใช้ข้อมูลร่วมกันสองฝ่าย = **Data Sharing Agreement** (DC ทั้งคู่)\n5. ป้าย CCTV ต้องมีอะไร = ผู้ควบคุมข้อมูล + วัตถุประสงค์ + ระยะเวลาเก็บ (30 วัน) + ช่องทางสิทธิ\n\n---\n## 🎯 จริยธรรมของขั้นที่ 5\nเอกสารเหล่านี้ไม่ใช่ \"พิธีกรรมกระดาษ\" แต่เป็นเครื่องมือทำให้หลักจริยธรรมเกิดจริง:\n**Privacy Notice = ความโปร่งใส · Consent = เคารพการกำหนดเจตนาตนเอง · DPA = ความรับผิดชอบเมื่อส่งต่อข้อมูล** → ปลายทางคือ **Trust**\n";
+const C0 = String.fromCharCode(1), C1 = String.fromCharCode(2);  // ตัวคั่นชั่วคราวสำหรับ inline code
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// จัดรูปแบบ inline: code, ลิงก์, ตัวหนา, ตัวเอียง  (rawHtml=true จะไม่ escape < >)
+function inline(t, rawHtml){
+  let s = rawHtml ? t : esc(t);
+  const codes = [];
+  s = s.replace(/`([^`]+)`/g, function(m,c){ codes.push(c); return C0+(codes.length-1)+C1; });
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+  s = s.replace(new RegExp(C0+'(\\d+)'+C1,'g'), function(m,i){ return '<code>'+codes[i]+'</code>'; });
+  return s;
+}
+
+function isTableSep(l){ return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.indexOf('-')>=0; }
+function splitRow(l){
+  let s = l.trim().replace(/^\|/,'').replace(/\|$/,'');
+  return s.split('|').map(function(c){ return c.trim(); });
+}
+
+function render(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  let html = '', i = 0, para = [];
+  const flush = function(){ if(para.length){ html += '<p>'+para.map(function(x){return inline(x);}).join('<br>')+'</p>'; para=[]; } };
+
+  while(i < lines.length){
+    let l = lines[i];
+
+    if(l.trim()===''){ flush(); i++; continue; }
+
+    // โค้ดบล็อก
+    if(/^`/.test(l.trim())){ flush(); let buf=[]; i++;
+      while(i<lines.length && !/^`/.test(lines[i].trim())){ buf.push(lines[i]); i++; }
+      i++; html += '<pre><code>'+esc(buf.join('\n'))+'</code></pre>'; continue; }
+
+    // หัวข้อ
+    let h = l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ flush(); const n=h[1].length; html += '<h'+n+'>'+inline(h[2])+'</h'+n+'>'; i++; continue; }
+
+    // เส้นคั่น (--- หรือ *** หรือ ___) บรรทัดที่มีแต่อักขระเหล่านี้
+    if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)){ flush(); html+='<hr>'; i++; continue; }
+
+    // ตาราง
+    if(l.trim().indexOf('|')===0 && i+1<lines.length && isTableSep(lines[i+1])){
+      flush();
+      const head = splitRow(l); i += 2;
+      let rows = [];
+      while(i<lines.length && lines[i].trim().indexOf('|')===0){ rows.push(splitRow(lines[i])); i++; }
+      let t='<table><thead><tr>'+head.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      for(const r of rows){ t+='<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>'; }
+      html += t+'</tbody></table>'; continue;
+    }
+
+    // blockquote
+    if(/^\s*>/.test(l)){ flush(); let buf=[];
+      while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+      html += '<blockquote>'+buf.map(function(x){return x.trim()===''?'':'<p>'+inline(x)+'</p>';}).join('')+'</blockquote>'; continue; }
+
+    // รายการ (รองรับย่อยตามการเยื้อง)
+    if(/^\s*([-*+]|\d+\.)\s+/.test(l)){ flush();
+      const block=[];
+      while(i<lines.length && (/^\s*([-*+]|\d+\.)\s+/.test(lines[i]) || (lines[i].trim()!=='' && /^\s{2,}\S/.test(lines[i]) && block.length))){
+        block.push(lines[i]); i++;
+      }
+      html += renderList(block); continue;
+    }
+
+    // HTML ดิบ (เช่น <details>)
+    if(/^\s*</.test(l)){ flush(); html += inline(l, true); i++; continue; }
+
+    para.push(l); i++;
+  }
+  flush();
+  return html;
+}
+
+// แปลงรายการที่มีการเยื้องเป็น <ul>/<ol> ซ้อนได้
+function renderList(block){
+  const items = [];
+  for(const raw of block){
+    const m = raw.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+    if(m){
+      items.push({ indent:m[1].length, ordered:/\d+\./.test(m[2]), text:m[3], used:false });
+    } else if(items.length){
+      items[items.length-1].text += '<br>'+inline(raw.trim());
+    }
+  }
+  if(!items.length) return '';
+  const baseIndent = Math.min.apply(null, items.map(function(n){return n.indent;}));
+  function build(parentIndent){
+    let out='', ordered=null, open=false;
+    for(let k=0;k<items.length;k++){
+      const n=items[k];
+      if(n.used) continue;
+      if(n.indent!==parentIndent) continue;
+      n.used=true;
+      if(!open){ ordered=n.ordered; out+='<'+(ordered?'ol':'ul')+'>'; open=true; }
+      // หาลูก (ระดับเยื้องมากกว่า) ที่อยู่ถัดไปก่อนจะกลับมาระดับเดิม
+      let childIndent=null;
+      for(let j=k+1;j<items.length;j++){
+        if(items[j].indent<=parentIndent) break;
+        if(!items[j].used){ childIndent=items[j].indent; break; }
+      }
+      let childHtml = (childIndent!==null) ? build(childIndent) : '';
+      out+='<li>'+inline(n.text)+childHtml+'</li>';
+    }
+    if(open) out+='</'+(ordered?'ol':'ul')+'>';
+    return out;
+  }
+  return build(baseIndent);
+}
+
+document.getElementById('content').innerHTML = render(MD);
+</script>
+</body>
+</html>

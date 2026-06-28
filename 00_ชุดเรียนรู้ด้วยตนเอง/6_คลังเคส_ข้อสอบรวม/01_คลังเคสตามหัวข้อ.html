@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📁 คลังเคส/ตัวอย่าง ตามหัวข้อ (รวมที่อาจารย์ยกในห้อง)</title>
+<style>
+  :root{--bg:#0f172a;--paper:#111c33;--txt:#e6edf6;--muted:#9fb0c7;--accent:#38bdf8;--line:#2b3a52;--hl:#fcd34d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;line-height:1.75}
+  .topnav{position:sticky;top:0;background:#0b1322ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+          padding:10px 16px;display:flex;gap:14px;align-items:center;z-index:50;font-size:14px}
+  .topnav a{color:var(--muted);text-decoration:none;padding:5px 11px;border:1px solid var(--line);border-radius:999px}
+  .topnav a:hover{color:var(--accent);border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:30px 22px 80px}
+  h1,h2,h3,h4{line-height:1.35;margin:1.5em 0 .6em;font-weight:700}
+  h1{font-size:27px;border-bottom:2px solid var(--accent);padding-bottom:.3em;margin-top:.3em}
+  h2{font-size:22px;color:#bfe6fb;border-bottom:1px solid var(--line);padding-bottom:.25em}
+  h3{font-size:18px;color:#a7d8f0}
+  h4{font-size:16px;color:var(--muted)}
+  p{margin:.7em 0}
+  strong{color:#fff;font-weight:700;background:linear-gradient(transparent 62%,#fcd34d33 62%)}
+  em{color:#fbcfe8;font-style:italic}
+  code{background:#0b1322;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.92em;color:#7dd3fc;
+       font-family:"Cascadia Code",Consolas,monospace}
+  pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{border:none;padding:0;background:none}
+  a{color:var(--accent)}
+  ul,ol{margin:.5em 0 .9em;padding-left:1.6em}
+  li{margin:.3em 0}
+  ul ul,ol ol,ul ol,ol ul{margin:.2em 0}
+  blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--accent);background:#0b132288;border-radius:0 8px 8px 0;color:#cdd9e8}
+  blockquote p{margin:.3em 0}
+  hr{border:none;border-top:1px dashed var(--line);margin:1.8em 0}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#16263f;color:#bfe6fb;font-weight:700}
+  tr:nth-child(even) td{background:#0f1c30}
+  details{background:#0b1322;border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:.7em 0}
+  summary{cursor:pointer;color:var(--accent);font-weight:600}
+  ::selection{background:#38bdf855}
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
+    <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
+  </div>
+  <main id="content"></main>
+
+<script>
+const MD = "# 📁 คลังเคส/ตัวอย่าง ตามหัวข้อ (รวมที่อาจารย์ยกในห้อง)\n### ใช้ฝึกอัตนัย — แต่ละเคสจัดรูปแบบ: สถานการณ์ → มาตรา/หลัก → วินิจฉัย → จริยธรรม\n\n\u003e 🎯 เคสที่ \"อาจารย์ยกเอง\" มีโอกาสออกสอบสูง — ทำความเข้าใจให้ครบ\n\n---\n## 1️⃣ PDPA\n\n| เคส (อาจารย์ยก) | มาตรา/หลัก | ประเด็นวินิจฉัย | จริยธรรม |\n|---|---|---|---|\n| **Facebook–Cambridge Analytica** ข้อมูลผู้ใช้ถูกนำไปทำ political profiling | Purpose Limitation, ความยินยอม | ใช้ข้อมูลผิดวัตถุประสงค์ที่แจ้ง = ละเมิด | ทำลายความไว้วางใจ (Trust) |\n| **โรงพยาบาลเก็บข้อมูลสุขภาพ** แล้วนำไปการตลาดอาหารเสริม | ม.26 (Sensitive), ม.27 | ข้อมูลสุขภาพ = อ่อนไหว ต้องขอยินยอมชัดแจ้ง; เปลี่ยนวัตถุประสงค์ต้องขอใหม่ | ป้องกันเลือกปฏิบัติ/เสียหายร้ายแรง |\n| **กล้องวงจรปิด CCTV** ในอาคาร | ม.24(5) Legitimate Interest, ม.23 | ไม่ต้องขอยินยอม แต่ต้องติดป้ายแจ้ง + เก็บเท่าจำเป็น (เช่น 90 วัน) | โปร่งใส + ได้สัดส่วน |\n| **USB สำรองข้อมูลหาย (เข้ารหัส)** vs **ระบบออนไลน์ถูกแฮก** | ม.37(4) | เคสแรก = ความเสี่ยงต่ำ; เคสหลัง = เสี่ยงสูง ต้องแจ้ง สคส.+เจ้าของข้อมูล ภายใน 72 ชม. | ความรับผิดชอบ (Accountability) |\n| **นายจ้างเปิดเผยเงินเดือนต่อสรรพากร** | ม.24(6) Legal Obligation | ไม่ต้องขอยินยอม (ปฏิบัติตามกฎหมาย) | ความชอบด้วยกฎหมาย |\n\n---\n## 2️⃣ พ.ร.บ.คอมพิวเตอร์ + ไซเบอร์\n\n| เคส | มาตรา/หลัก | ประเด็นวินิจฉัย | จริยธรรม |\n|---|---|---|---|\n| **แฮกเข้าระบบที่มีรหัสผ่าน** | ม.5 (เข้าถึงระบบ) | เข้าถึงระบบมีมาตรการป้องกันโดยมิชอบ → ผิด ≤6 ด./1 หมื่น | เคารพสิทธิ/ทรัพย์สินดิจิทัลผู้อื่น |\n| **โพสต์/แชร์ข่าวปลอม** กระทบความมั่นคง | ม.14 | นำเข้า/เผยแพร่ข้อมูลเท็จ; \"แชร์โดยรู้อยู่\" ผิดด้วย | ใช้เสรีภาพอย่างรับผิดชอบ |\n| **ตัดต่อภาพใส่ผู้อื่นให้เสียชื่อเสียง** | ม.16 | ภาพตัดต่อทำให้อับอาย ≤3 ปี/2 แสน | ไม่ก่อความเสียหาย (Non-Maleficence) |\n| **DDoS ทำเว็บล่ม** | ม.10 (รบกวนระบบ) | ขัดขวางระบบจนใช้ไม่ได้ ≤5 ปี/1 แสน | ไม่ก่ออันตรายต่อส่วนรวม |\n| **โรงพยาบาลถูก Ransomware** (เคสไซเบอร์) | พ.ร.บ.ไซเบอร์ ม.44–46, CII ม.49 | หน่วยงาน CII ต้องมีมาตรการ+แจ้งเหตุ+รับมือ | ความมั่นคงของส่วนรวม (Collective Security) |\n| **ผู้บริหารละเลยไม่ป้องกัน/ไม่รายงานเหตุ** | ม.77 (Executive Liability) | ผู้บริหารต้องร่วมรับผิด | รับผิดชอบต่อสังคม |\n\n---\n## 3️⃣ ทรัพย์สินทางปัญญา (เคสที่อาจารย์ยกเยอะ)\n\n| เคส | มาตรา/หลัก | ประเด็นวินิจฉัย | จริยธรรม |\n|---|---|---|---|\n| **นาย A วาดภาพวัดพระแก้ว** | หลัก Originality, Idea-Expression | ลิขสิทธิ์เกิดทันทีเมื่อแสดงออกเป็นรูปร่าง (แค่ \"ความคิด\" ยังไม่คุ้มครอง) | เคารพการสร้างสรรค์ |\n| **คดี \"หมีพ่นไฟ\" จ่าย 10 ล้าน** | การลวงขาย (Passing Off) | คุ้มครองเครื่องหมายแม้ไม่จด ถ้าทำให้ผู้บริโภคสับสน | ไม่หากินบนชื่อเสียงผู้อื่น |\n| **\"น้ำดื่มมังกรทอง\" vs \"มังกรมอง\"** | เลียนเครื่องหมายการค้า ≤2 ปี/2 แสน | คล้ายจนหลงเชื่อ = ละเมิด | ความซื่อสัตย์ทางการค้า |\n| **Adidas ปลอม / โลโก้ \"adios\"** | ปลอม ≤4 ปี/4 แสน · เลียน ≤2 ปี/2 แสน | ปลอม = เหมือนทุกประการ; เลียน = คล้ายให้หลงเชื่อ | เคารพทรัพย์สินทางปัญญา |\n| **นาย B แอบขาย Lecture ของนาย A** | สิทธิทำซ้ำ/ข้อยกเว้น Fair Use | ทำซ้ำเพื่อขาย (หากำไร) ไม่เข้าข้อยกเว้น = ละเมิด | เคารพแรงงานทางปัญญา |\n| **เปิดเพลงมีลิขสิทธิ์ในร้านอาหาร** | สิทธิเผยแพร่ต่อสาธารณะ | เผยแพร่เชิงพาณิชย์ต้องได้รับอนุญาต | — |\n\n---\n## 4️⃣ AI (เคสจริงระดับโลก — อาจารย์ยกเยอะที่สุด)\n\n| เคส | หลัก/ระดับเสี่ยง | ประเด็น | จริยธรรม |\n|---|---|---|---|\n| **COMPAS** (ศาลสหรัฐทำนายการกระทำผิดซ้ำ) | High Risk; Fairness | อคติเชื้อชาติ (bias) จาก training data | ความเป็นธรรม/ไม่เลือกปฏิบัติ |\n| **Amazon Rekognition** จำใบหน้าผิด 28 ส.ส. | High Risk; Reliability | จดจำใบหน้าผิดพลาด โดยเฉพาะคนผิวสี/ผู้หญิง | ความน่าเชื่อถือ + Fairness |\n| **Microsoft Tay Chatbot** ปิดใน 16 ชม. | Security; Reliability | ถูกสอนจากผู้ไม่ประสงค์ดีให้โพสต์เหยียด | ความปลอดภัย + มนุษย์ควบคุม |\n| **China Social Credit System** | **Prohibited** (ห้ามใน EU) | Social scoring ต้องห้ามตาม EU AI Act | ศักดิ์ศรีมนุษย์/เสรีภาพ |\n| **ChatGPT/Grok data leaks** | Privacy; PDPA ม.26 | Gen AI จำและเผยข้อมูลส่วนบุคคล (Model Memorization) | ความเป็นส่วนตัว |\n| **Deepfake** | **Limited Risk** | ต้องแจ้งว่าเป็นเนื้อหาสร้างโดย AI | โปร่งใส |\n\n---\n## 5️⃣ ธุรกรรมทางอิเล็กทรอนิกส์\n\n| เคส | มาตรา/หลัก | ประเด็น | จริยธรรม |\n|---|---|---|---|\n| **ทำสัญญากู้เงินผ่านอีเมล + พิมพ์ชื่อแทนเซ็น** | Functional Equivalence, ม.9 | e-document=กระดาษ; พิมพ์ชื่อ=ลายมือชื่อทั่วไป → สัญญามีผล | ความซื่อสัตย์ ไม่อ้างรูปแบบมาปฏิเสธ |\n| **อ้างว่า \"ไม่ได้เซ็น\" จึงไม่ผูกพัน** | ม.7 (ห้ามปฏิเสธผลทางกฎหมาย) | ปฏิเสธไม่ได้เพียงเพราะเป็นอิเล็กทรอนิกส์ | ความเป็นธรรม |\n| **ใช้ลายเซ็นดิจิทัล PKI + ใบรับรอง CA** | ม.26 (ประเภท 2–3) | น่าเชื่อถือสูง ตรวจจับการแก้ไขได้ (Non-repudiation) | Integrity/Trust |\n| **ปลอมเป็นบุคคลอื่นทำธุรกรรม (Impersonation)** | ภัย Repudiation/Impersonation | ต้องมี Identity verification | ความซื่อสัตย์ |\n| **Smart Contract / ระบบอัตโนมัติ** | ม.13 (Automated Systems) | สัญญาจากระบบอัตโนมัติมีผลผูกพัน | — |\n";
+const C0 = String.fromCharCode(1), C1 = String.fromCharCode(2);  // ตัวคั่นชั่วคราวสำหรับ inline code
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// จัดรูปแบบ inline: code, ลิงก์, ตัวหนา, ตัวเอียง  (rawHtml=true จะไม่ escape < >)
+function inline(t, rawHtml){
+  let s = rawHtml ? t : esc(t);
+  const codes = [];
+  s = s.replace(/`([^`]+)`/g, function(m,c){ codes.push(c); return C0+(codes.length-1)+C1; });
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+  s = s.replace(new RegExp(C0+'(\\d+)'+C1,'g'), function(m,i){ return '<code>'+codes[i]+'</code>'; });
+  return s;
+}
+
+function isTableSep(l){ return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.indexOf('-')>=0; }
+function splitRow(l){
+  let s = l.trim().replace(/^\|/,'').replace(/\|$/,'');
+  return s.split('|').map(function(c){ return c.trim(); });
+}
+
+function render(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  let html = '', i = 0, para = [];
+  const flush = function(){ if(para.length){ html += '<p>'+para.map(function(x){return inline(x);}).join('<br>')+'</p>'; para=[]; } };
+
+  while(i < lines.length){
+    let l = lines[i];
+
+    if(l.trim()===''){ flush(); i++; continue; }
+
+    // โค้ดบล็อก
+    if(/^`/.test(l.trim())){ flush(); let buf=[]; i++;
+      while(i<lines.length && !/^`/.test(lines[i].trim())){ buf.push(lines[i]); i++; }
+      i++; html += '<pre><code>'+esc(buf.join('\n'))+'</code></pre>'; continue; }
+
+    // หัวข้อ
+    let h = l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ flush(); const n=h[1].length; html += '<h'+n+'>'+inline(h[2])+'</h'+n+'>'; i++; continue; }
+
+    // เส้นคั่น (--- หรือ *** หรือ ___) บรรทัดที่มีแต่อักขระเหล่านี้
+    if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)){ flush(); html+='<hr>'; i++; continue; }
+
+    // ตาราง
+    if(l.trim().indexOf('|')===0 && i+1<lines.length && isTableSep(lines[i+1])){
+      flush();
+      const head = splitRow(l); i += 2;
+      let rows = [];
+      while(i<lines.length && lines[i].trim().indexOf('|')===0){ rows.push(splitRow(lines[i])); i++; }
+      let t='<table><thead><tr>'+head.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      for(const r of rows){ t+='<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>'; }
+      html += t+'</tbody></table>'; continue;
+    }
+
+    // blockquote
+    if(/^\s*>/.test(l)){ flush(); let buf=[];
+      while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+      html += '<blockquote>'+buf.map(function(x){return x.trim()===''?'':'<p>'+inline(x)+'</p>';}).join('')+'</blockquote>'; continue; }
+
+    // รายการ (รองรับย่อยตามการเยื้อง)
+    if(/^\s*([-*+]|\d+\.)\s+/.test(l)){ flush();
+      const block=[];
+      while(i<lines.length && (/^\s*([-*+]|\d+\.)\s+/.test(lines[i]) || (lines[i].trim()!=='' && /^\s{2,}\S/.test(lines[i]) && block.length))){
+        block.push(lines[i]); i++;
+      }
+      html += renderList(block); continue;
+    }
+
+    // HTML ดิบ (เช่น <details>)
+    if(/^\s*</.test(l)){ flush(); html += inline(l, true); i++; continue; }
+
+    para.push(l); i++;
+  }
+  flush();
+  return html;
+}
+
+// แปลงรายการที่มีการเยื้องเป็น <ul>/<ol> ซ้อนได้
+function renderList(block){
+  const items = [];
+  for(const raw of block){
+    const m = raw.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+    if(m){
+      items.push({ indent:m[1].length, ordered:/\d+\./.test(m[2]), text:m[3], used:false });
+    } else if(items.length){
+      items[items.length-1].text += '<br>'+inline(raw.trim());
+    }
+  }
+  if(!items.length) return '';
+  const baseIndent = Math.min.apply(null, items.map(function(n){return n.indent;}));
+  function build(parentIndent){
+    let out='', ordered=null, open=false;
+    for(let k=0;k<items.length;k++){
+      const n=items[k];
+      if(n.used) continue;
+      if(n.indent!==parentIndent) continue;
+      n.used=true;
+      if(!open){ ordered=n.ordered; out+='<'+(ordered?'ol':'ul')+'>'; open=true; }
+      // หาลูก (ระดับเยื้องมากกว่า) ที่อยู่ถัดไปก่อนจะกลับมาระดับเดิม
+      let childIndent=null;
+      for(let j=k+1;j<items.length;j++){
+        if(items[j].indent<=parentIndent) break;
+        if(!items[j].used){ childIndent=items[j].indent; break; }
+      }
+      let childHtml = (childIndent!==null) ? build(childIndent) : '';
+      out+='<li>'+inline(n.text)+childHtml+'</li>';
+    }
+    if(open) out+='</'+(ordered?'ol':'ul')+'>';
+    return out;
+  }
+  return build(baseIndent);
+}
+
+document.getElementById('content').innerHTML = render(MD);
+</script>
+</body>
+</html>

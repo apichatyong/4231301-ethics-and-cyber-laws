@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛠️ PDPA ภาคปฏิบัติ (Implementation & Compliance) — ฉบับมีคำอธิบาย+ตัวอย่าง</title>
+<style>
+  :root{--bg:#0f172a;--paper:#111c33;--txt:#e6edf6;--muted:#9fb0c7;--accent:#38bdf8;--line:#2b3a52;--hl:#fcd34d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:"Sarabun","Segoe UI",Tahoma,sans-serif;line-height:1.75}
+  .topnav{position:sticky;top:0;background:#0b1322ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+          padding:10px 16px;display:flex;gap:14px;align-items:center;z-index:50;font-size:14px}
+  .topnav a{color:var(--muted);text-decoration:none;padding:5px 11px;border:1px solid var(--line);border-radius:999px}
+  .topnav a:hover{color:var(--accent);border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:30px 22px 80px}
+  h1,h2,h3,h4{line-height:1.35;margin:1.5em 0 .6em;font-weight:700}
+  h1{font-size:27px;border-bottom:2px solid var(--accent);padding-bottom:.3em;margin-top:.3em}
+  h2{font-size:22px;color:#bfe6fb;border-bottom:1px solid var(--line);padding-bottom:.25em}
+  h3{font-size:18px;color:#a7d8f0}
+  h4{font-size:16px;color:var(--muted)}
+  p{margin:.7em 0}
+  strong{color:#fff;font-weight:700;background:linear-gradient(transparent 62%,#fcd34d33 62%)}
+  em{color:#fbcfe8;font-style:italic}
+  code{background:#0b1322;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.92em;color:#7dd3fc;
+       font-family:"Cascadia Code",Consolas,monospace}
+  pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{border:none;padding:0;background:none}
+  a{color:var(--accent)}
+  ul,ol{margin:.5em 0 .9em;padding-left:1.6em}
+  li{margin:.3em 0}
+  ul ul,ol ol,ul ol,ol ul{margin:.2em 0}
+  blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--accent);background:#0b132288;border-radius:0 8px 8px 0;color:#cdd9e8}
+  blockquote p{margin:.3em 0}
+  hr{border:none;border-top:1px dashed var(--line);margin:1.8em 0}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#16263f;color:#bfe6fb;font-weight:700}
+  tr:nth-child(even) td{background:#0f1c30}
+  details{background:#0b1322;border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:.7em 0}
+  summary{cursor:pointer;color:var(--accent);font-weight:600}
+  ::selection{background:#38bdf855}
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
+    <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
+  </div>
+  <main id="content"></main>
+
+<script>
+const MD = "# 🛠️ PDPA ภาคปฏิบัติ (Implementation \u0026 Compliance) — ฉบับมีคำอธิบาย+ตัวอย่าง\n### จาก Workshop คาบ 3 | อ.กิตติศักดิ์ ธรรมรักษาสิทธิ์ (HR Compliance \u0026 DPO) + อ.กชพร | ทดสอบย่อย 10 คะแนน\n\n\u003e ชุด 01–04 เน้น \"ตัวกฎหมาย\" — ไฟล์นี้เน้น **\"การนำ PDPA ไปทำจริงในองค์กร\"**\n\u003e Workshop ใช้บริษัทสมมติ **\"Coffee Concepts\"** (ร้านกาแฟ/ค้าปลีก) เป็นกรณีตัวอย่างตลอดทั้งคาบ\n\n---\n\n## 1. หลุมพรางนิยามที่อาจารย์เน้น (เข้าใจก่อนลงมือ)\n\n**ทำไมต้องแยกข้อมูลส่วนบุคคล vs ข้อมูลทั่วไปให้ออก?**\nเพราะถ้าแยกไม่ออก องค์กรจะ \"ทำเกิน\" (เปลืองทรัพยากรไปคุ้มครองข้อมูลที่ไม่ต้องคุ้มครอง) หรือ \"ทำขาด\" (ละเลยข้อมูลที่กฎหมายคุ้มครอง → โดนปรับ)\n\n⭐ **คำถามดักในห้อง: \"อีเมลเป็นข้อมูลส่วนบุคคลไหม?\"**\nคำตอบคือ **\"แล้วแต่ว่าระบุตัวบุคคลได้หรือไม่\"**\n- `recruitment-th@coffee-concepts.co.th` (อีเมลกลางของแผนก) → **ข้อมูลทั่วไป** เพราะชี้ไปที่ \"ตำแหน่งงาน\" ไม่ใช่ตัวคน\n- `kittisak.thamrugsasit@coffee-concepts.co.th` (มีชื่อ-สกุล) → **ข้อมูลส่วนบุคคล** เพราะระบุตัวคนได้\n\n**ข้อมูลทั่วไป (ไม่อยู่ใต้ PDPA):** เลขทะเบียนบริษัท · เบอร์/อีเมล/ที่อยู่สำนักงาน · ข้อมูลนิรนาม (Anonymous) · ข้อมูลผู้ตาย · ยอดขายรวม · จำนวนผู้เข้าชมเว็บแบบรวม (ไม่ระบุใคร)\n\n---\n\n## 2. ⭐ 5 ขั้นตอนทำองค์กรให้ PDPA Compliant (พร้อมคำอธิบาย \"ทำไม/ทำอย่างไร\")\n\n### ขั้น 1 — ตั้งคณะทำงาน\n**ทำไม:** PDPA มีศัพท์เฉพาะเยอะ การอบรมทั้งบริษัทพร้อมกันทำได้ยาก จึงต้องตั้ง \"ทีมแกน\" ก่อน\n**ใครบ้าง:** DPO + ฝ่ายกฎหมาย + IT/ดิจิทัล + ผู้บริหารที่ออกนโยบายได้ + **Champion**\n\u003e 💡 **Champion** = ตัวแทนจากแต่ละฝ่ายที่ \"ใช้ข้อมูลจริง\" (HR, การตลาด, ขาย, ลูกค้าสัมพันธ์, E-Commerce) ทำหน้าที่ให้ข้อมูลกิจกรรมของฝ่ายตน + ประสานงาน — เป็นกลไกสำคัญที่ทำให้สำรวจข้อมูลได้ครบ\n\n### ขั้น 2 — อบรมพนักงาน\nให้ทีมเข้าใจหลักการ + แยกแยะ DC/DP/DS + รู้จักข้อยกเว้น ก่อนลงมือสำรวจ\n\n### ขั้น 3 — สำรวจข้อมูล (PDPA Fact-Finding Questionnaire)\nส่งแบบสำรวจให้ **Champion แต่ละฝ่าย** กรอกว่าฝ่ายตนเก็บ/ใช้/เปิดเผยข้อมูลอะไรบ้าง บันทึกในรูป **ROPA ของฝ่าย** แล้วนำมารวมเป็น **ROPA ของบริษัท**\n\u003e เป้าหมาย: ให้ DPO เห็น \"ภาพรวมการประมวลผลข้อมูลทั้งองค์กร\"\n\n### ขั้น 4 — Data Mapping \u0026 Gap Analysis\nเอาข้อมูลจากแบบสำรวจมาทำแผนผังการไหลของข้อมูล (Data Flow) แล้ว **หาช่องว่าง** ว่าจุดไหนยังไม่ตามกฎหมาย\n\u003e ตัวอย่างจริง: Coffee Concepts จัดทำ *\"List of Key Issues and Recommendations\"* = ผลของ Gap Analysis\n\n### ขั้น 5 — จัดทำเอกสาร/เครื่องมือปิดช่องว่าง\n→ ดูชุดเอกสารข้อ 3\n\n---\n\n## 3. ⭐ ชุดเอกสารสำคัญ (อธิบายว่าแต่ละตัวคืออะไร + ใช้ตอนไหน)\n\n| เอกสาร | คืออะไร / ใช้ตอนไหน |\n|---|---|\n| **Privacy Notice** | **ประกาศ**ให้เจ้าของข้อมูลรู้ว่าเราเก็บอะไร-ทำไม-นานเท่าไหร่-ส่งให้ใคร-มีสิทธิอะไร (ตาม ม.23) ต้องเข้าถึงง่าย ภาษาชัด → เช่น หน้า Privacy Notice ของ **Starbucks** |\n| **Retention Policy** | นโยบายกำหนด \"เก็บนานเท่าไหร่แล้วลบ\" เพื่อไม่ให้เก็บเกินจำเป็น |\n| **Consent Form** | แบบขอความยินยอม ใช้เฉพาะกิจกรรมที่ต้องอาศัยฐานยินยอม เช่น **การตลาด / วิเคราะห์พฤติกรรม / เก็บข้อมูลอ่อนไหว** — ต้องแยกช่องออกจากเงื่อนไขบริการอื่น |\n| **แบบคำร้องขอใช้สิทธิ (DSAR Form)** | ฟอร์มให้เจ้าของข้อมูลยื่นใช้สิทธิ ม.30–36 (มีช่องระบุว่ายื่นเองหรือเป็นตัวแทน + แนบสำเนาบัตร ปชช./หนังสือมอบอำนาจ) |\n| **ROPA** | บันทึกรายการประมวลผลทั้งองค์กร (ม.39) — เช่นไฟล์ Excel ของ Coffee Concepts |\n| **แผนรับมือเหตุละเมิด** | ขั้นตอนเมื่อข้อมูลรั่ว → แจ้ง สคส. ใน 72 ชม. + เยียวยา (ม.37) |\n| **DPA / Data Sharing Agreement** | สัญญาตอนส่งข้อมูลออกนอกองค์กร (ดูข้อ 4) |\n\n---\n\n## 4. ⭐⭐ DPA vs Data Sharing Agreement (จุดที่อาจารย์เน้นมาก — ออกสอบ)\n\nทั้งคู่ใช้ตอน \"ส่งข้อมูลส่วนบุคคลออกนอกองค์กร\" แต่ต่างกันที่ **ใครเป็นเจ้าของอำนาจตัดสินใจ**\n\n| | **DPA (Data Processing Agreement)** | **Data Sharing Agreement** |\n|---|---|---|\n| ใช้เมื่อ | ส่งให้ **outsource/ผู้รับฝากข้อมูล** ที่ทำ**ตามคำสั่งเรา** | ทั้งสองฝ่าย **ใช้/แลกเปลี่ยนข้อมูลร่วมกัน** ต่างคนต่างตัดสินใจ |\n| สถานะ | เรา = **DC**, อีกฝ่าย = **DP** | **ทั้งคู่เป็น DC** |\n| เทียบกับ | คล้าย NDA แต่เน้นคุ้มครองข้อมูลส่วนบุคคล | — |\n| เนื้อหาขั้นต่ำ | วัตถุประสงค์ส่งต่อ, ประเภทข้อมูล, เงื่อนไขประมวลผล, ระยะเวลาเก็บ, มาตรฐานความปลอดภัย, **ความรับผิดหากข้อมูลรั่ว** | คล้ายกัน + กำหนดความรับผิดร่วม |\n\n**ตัวอย่างแยกให้เห็นชัด:**\n- บริษัทส่งข้อมูลพนักงานให้บริษัท **Payroll จ่ายเงินเดือน** → Payroll ทำตามคำสั่ง = **DP** → ใช้ **DPA**\n- บริษัทส่งข้อมูลลูกค้าให้ **บริษัทวิจัยตลาด** เอาไปวิเคราะห์เอง → ถ้าวิจัยตัดสินใจเองว่าจะวิเคราะห์อย่างไร = อาจเป็น DC ร่วม → **Data Sharing Agreement**\n\u003e 💡 ควรฝัง DPA ไว้ในกระบวนการ **จัดซื้อจัดจ้าง** ทุกครั้งที่ต้องส่งข้อมูลออกนอกองค์กร\n\n---\n\n## 5. 📌 กรณีศึกษาจริงที่อาจารย์ยก (อธิบายละเอียด)\n\n### 🎯 กรณีศึกษา 1 — ระบบสะสมคะแนนสมาชิกห้างสรรพสินค้า\n**สถานการณ์:** ร้านกาแฟ (Coffee Concepts) ตั้งอยู่ในห้าง ลูกค้าสมัครสมาชิก/สะสมคะแนนผ่านระบบของ **ห้าง** โดยใช้เบอร์โทร/บัตรสมาชิก\n\n**กระบวนการ 4 ขั้น:** ① สมัคร/สะสมคะแนน → ② จัดเก็บข้อมูล (เก็บในระบบของ**ห้าง**) → ③ ใช้คะแนน (เสียบบัตร/สแกนที่เครื่อง POS) → ④ คุ้มครองข้อมูล\n\n**ประเด็นวินิจฉัย (สำคัญ):**\n- **ห้างสรรพสินค้า = ผู้ควบคุมข้อมูล (DC)** เพราะเป็นเจ้าของระบบและตัดสินใจ\n- **ร้านกาแฟ = เป็นเพียง \"ผู้ช่วยอำนวยความสะดวก\" (Facilitator)** — แจ้งลูกค้า/แนะนำการสมัคร/ช่วยใช้สิทธิผ่านบัตรเท่านั้น\n- **ร้านค้าไม่ได้เก็บข้อมูลสมาชิกไว้เอง** และไม่มีสิทธิเข้าถึงฐานข้อมูลของห้าง\n- ✅ **ความเสี่ยง PDPA ของร้านค้าจึงอยู่ระดับต่ำ** เพราะ: ไม่บันทึกเบอร์/รูปลูกค้าไว้เอง · ไม่นำข้อมูลออกนอกระบบ · ไม่มีสิทธิเข้าถึงฐานข้อมูลสมาชิก\n\n\u003e ⚠️ **ข้อควรระวังที่อาจารย์เตือน:** หากร้านค้าไปปฏิบัติผิด เช่น **แอบจดเบอร์ลูกค้าเอง** หรือใช้ POS เชื่อมต่อจัดการข้อมูลสมาชิกของห้าง → สถานะทางกฎหมายอาจเปลี่ยน (กลายเป็นผู้เก็บ/ประมวลผลข้อมูล) ต้องตรวจสอบกระบวนการทำงานจริงประกอบ\n\u003e\n\u003e **บทเรียน:** สถานะ DC/DP **ไม่ได้ดูที่ \"ป้ายชื่อ\" แต่ดูที่ \"ใครตัดสินใจ/ใครเก็บข้อมูลจริง\"**\n\n### 🎯 กรณีศึกษา 2 — กล้องวงจรปิด (CCTV) กับ PDPA\n**สถานการณ์:** ร้านติดกล้องวงจรปิด → ภาพใบหน้าลูกค้า = **\"ข้อมูลส่วนบุคคล\"** ต้องปฏิบัติตาม PDPA\n\n**5 หลักสำคัญในการติด CCTV ให้ถูกกฎหมาย:**\n1. **มีวัตถุประสงค์ชัดเจน** (เช่น เพื่อความปลอดภัย/ป้องกันอาชญากรรม)\n2. **แจ้งเจ้าของข้อมูล** — ติดป้าย **\"CCTV in Operation / บริเวณนี้มีการบันทึกภาพ\"**\n3. **เก็บเท่าที่จำเป็น** — โดยทั่วไป **30 วัน**\n4. **รักษาความปลอดภัยของภาพ** — จำกัดผู้เข้าถึง\n5. **ไม่ใช้ข้อมูลเกินวัตถุประสงค์**\n\n- **ฐานการประมวลผล:** ส่วนใหญ่ใช้ **ฐานประโยชน์โดยชอบด้วยกฎหมาย (ม.24(5))** ไม่ต้องขอความยินยอม แต่ต้องแจ้ง (ป้าย) + ทำหน้าที่ DC ครบ\n- **DC/DP:** เจ้าของสถานที่ = DC; บริษัทรับติดตั้ง/ดูแลระบบกล้อง = DP\n- **Do\u0027s:** ติดป้ายแจ้ง, ตั้งมุมกล้องเท่าที่จำเป็น, จำกัดสิทธิเข้าถึง · **Don\u0027ts:** ส่อง CCTV เข้าพื้นที่ส่วนตัวคนอื่น, เผยแพร่ภาพมั่ว\n- **ตัวอย่างป้าย CCTV จริง (Coffee Concepts Retail):** ระบุผู้ควบคุมข้อมูล + วัตถุประสงค์ + **ระยะเวลาเก็บ 30 วัน** + QR code ลิงก์ไป Privacy Notice\n\n\u003e ⚠️ การติดกล้องในบ้านส่วนตัวเพื่อดูเองอาจเข้า**ข้อยกเว้น ม.4** (ใช้ส่วนตน/ครอบครัว) → ไม่อยู่ใต้ PDPA แต่ถ้าส่องไปที่สาธารณะ/บ้านคนอื่นต้องระวัง\n\n### 🎯 กรณีศึกษา 3 — เอกสารจริงในการใช้สิทธิ \u0026 ส่งต่อข้อมูล\nWorkshop ยกตัวอย่างฟอร์มจริง:\n- **แบบคำร้องขอใช้สิทธิ (DSAR Form)** ของ Coffee Concepts — มีช่องระบุว่ายื่นเอง/เป็นตัวแทน + แนบสำเนาบัตร ปชช. / หนังสือมอบอำนาจ → สะท้อนหน้าที่รองรับสิทธิเจ้าของข้อมูล (ม.30–36)\n- **Data Processing Agreement (DPA)** ตัวอย่าง — สัญญาเมื่อส่งข้อมูลให้ outsource\n\n---\n\n## 6. ❓ แนวข้อสอบ Workshop (10 คะแนน) พร้อมเฉลย\n\n**ปรนัย/จับคู่:**\n1. ร้านกาแฟในห้างเป็นเพียงผู้แนะนำการสมัครสมาชิก ไม่เก็บข้อมูลเอง → ร้านมีสถานะ/ความเสี่ยงอย่างไร? → *(เป็นเพียง Facilitator, ความเสี่ยง PDPA ต่ำ; ห้าง=DC)*\n2. ภาพจากกล้องวงจรปิดเป็นข้อมูลส่วนบุคคลหรือไม่? → *(ใช่ ต้องปฏิบัติตาม PDPA)*\n3. CCTV เก็บภาพได้นานเท่าใดโดยทั่วไป? → *(ประมาณ 30 วัน — เท่าที่จำเป็น)*\n4. ส่งข้อมูลพนักงานให้บริษัท Payroll → Payroll เป็น? → *(ผู้ประมวลผล DP → ใช้ DPA)*\n5. เอกสารที่ประกาศวัตถุประสงค์การเก็บข้อมูลให้เจ้าของข้อมูลทราบ คือ? → *(Privacy Notice)*\n\n**อัตนัย (เคสประยุกต์ — โครง 4 ขั้น):**\n\u003e *\"บริษัท A จ้างบริษัท B ทำการตลาดออนไลน์ โดยส่งรายชื่อ+เบอร์ลูกค้าให้ B ยิงโฆษณา จงระบุสถานะของ A/B, เอกสารที่ต้องทำ และฐานการประมวลผล\"*\n- **A = DC, B = DP** → ต้องทำ **DPA**\n- การตลาด = ใช้ฐาน **ความยินยอม (ม.19)** → ต้องมี **Consent Form** + **Privacy Notice** ที่ลูกค้ายินยอมไว้แต่แรก\n- ถ้า A ไม่เคยขอยินยอมเพื่อการตลาด = ส่งให้ B ไม่ได้ (ละเมิด)\n- **จริยธรรม:** เคารพการกำหนดเจตนาตนเอง + โปร่งใส + ไม่ใช้ข้อมูลผิดวัตถุประสงค์\n\n---\n\n## 7. 🎯 มิติจริยธรรมภาคปฏิบัติ\nPDPA Compliance ไม่ใช่แค่ \"ทำเอกสารให้ครบเพื่อกันโดนปรับ\" แต่คือการ **สร้างวัฒนธรรมเคารพข้อมูลของผู้อื่นทั้งองค์กร** — ตั้งแต่ผู้บริหารถึงพนักงานหน้าร้าน\nเคสร้านกาแฟ/CCTV สอนว่า: **เก็บเท่าที่จำเป็น + แจ้งให้ชัด + ไม่เข้าถึงเกินบทบาท** = ลดความเสี่ยงและสร้าง **ความไว้วางใจ (Trust)** ให้ลูกค้า ซึ่งคือหัวใจที่แท้จริงของ PDPA\n";
+const C0 = String.fromCharCode(1), C1 = String.fromCharCode(2);  // ตัวคั่นชั่วคราวสำหรับ inline code
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// จัดรูปแบบ inline: code, ลิงก์, ตัวหนา, ตัวเอียง  (rawHtml=true จะไม่ escape < >)
+function inline(t, rawHtml){
+  let s = rawHtml ? t : esc(t);
+  const codes = [];
+  s = s.replace(/`([^`]+)`/g, function(m,c){ codes.push(c); return C0+(codes.length-1)+C1; });
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+  s = s.replace(new RegExp(C0+'(\\d+)'+C1,'g'), function(m,i){ return '<code>'+codes[i]+'</code>'; });
+  return s;
+}
+
+function isTableSep(l){ return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.indexOf('-')>=0; }
+function splitRow(l){
+  let s = l.trim().replace(/^\|/,'').replace(/\|$/,'');
+  return s.split('|').map(function(c){ return c.trim(); });
+}
+
+function render(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  let html = '', i = 0, para = [];
+  const flush = function(){ if(para.length){ html += '<p>'+para.map(function(x){return inline(x);}).join('<br>')+'</p>'; para=[]; } };
+
+  while(i < lines.length){
+    let l = lines[i];
+
+    if(l.trim()===''){ flush(); i++; continue; }
+
+    // โค้ดบล็อก
+    if(/^`/.test(l.trim())){ flush(); let buf=[]; i++;
+      while(i<lines.length && !/^`/.test(lines[i].trim())){ buf.push(lines[i]); i++; }
+      i++; html += '<pre><code>'+esc(buf.join('\n'))+'</code></pre>'; continue; }
+
+    // หัวข้อ
+    let h = l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ flush(); const n=h[1].length; html += '<h'+n+'>'+inline(h[2])+'</h'+n+'>'; i++; continue; }
+
+    // เส้นคั่น (--- หรือ *** หรือ ___) บรรทัดที่มีแต่อักขระเหล่านี้
+    if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)){ flush(); html+='<hr>'; i++; continue; }
+
+    // ตาราง
+    if(l.trim().indexOf('|')===0 && i+1<lines.length && isTableSep(lines[i+1])){
+      flush();
+      const head = splitRow(l); i += 2;
+      let rows = [];
+      while(i<lines.length && lines[i].trim().indexOf('|')===0){ rows.push(splitRow(lines[i])); i++; }
+      let t='<table><thead><tr>'+head.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      for(const r of rows){ t+='<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>'; }
+      html += t+'</tbody></table>'; continue;
+    }
+
+    // blockquote
+    if(/^\s*>/.test(l)){ flush(); let buf=[];
+      while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+      html += '<blockquote>'+buf.map(function(x){return x.trim()===''?'':'<p>'+inline(x)+'</p>';}).join('')+'</blockquote>'; continue; }
+
+    // รายการ (รองรับย่อยตามการเยื้อง)
+    if(/^\s*([-*+]|\d+\.)\s+/.test(l)){ flush();
+      const block=[];
+      while(i<lines.length && (/^\s*([-*+]|\d+\.)\s+/.test(lines[i]) || (lines[i].trim()!=='' && /^\s{2,}\S/.test(lines[i]) && block.length))){
+        block.push(lines[i]); i++;
+      }
+      html += renderList(block); continue;
+    }
+
+    // HTML ดิบ (เช่น <details>)
+    if(/^\s*</.test(l)){ flush(); html += inline(l, true); i++; continue; }
+
+    para.push(l); i++;
+  }
+  flush();
+  return html;
+}
+
+// แปลงรายการที่มีการเยื้องเป็น <ul>/<ol> ซ้อนได้
+function renderList(block){
+  const items = [];
+  for(const raw of block){
+    const m = raw.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+    if(m){
+      items.push({ indent:m[1].length, ordered:/\d+\./.test(m[2]), text:m[3], used:false });
+    } else if(items.length){
+      items[items.length-1].text += '<br>'+inline(raw.trim());
+    }
+  }
+  if(!items.length) return '';
+  const baseIndent = Math.min.apply(null, items.map(function(n){return n.indent;}));
+  function build(parentIndent){
+    let out='', ordered=null, open=false;
+    for(let k=0;k<items.length;k++){
+      const n=items[k];
+      if(n.used) continue;
+      if(n.indent!==parentIndent) continue;
+      n.used=true;
+      if(!open){ ordered=n.ordered; out+='<'+(ordered?'ol':'ul')+'>'; open=true; }
+      // หาลูก (ระดับเยื้องมากกว่า) ที่อยู่ถัดไปก่อนจะกลับมาระดับเดิม
+      let childIndent=null;
+      for(let j=k+1;j<items.length;j++){
+        if(items[j].indent<=parentIndent) break;
+        if(!items[j].used){ childIndent=items[j].indent; break; }
+      }
+      let childHtml = (childIndent!==null) ? build(childIndent) : '';
+      out+='<li>'+inline(n.text)+childHtml+'</li>';
+    }
+    if(open) out+='</'+(ordered?'ol':'ul')+'>';
+    return out;
+  }
+  return build(baseIndent);
+}
+
+document.getElementById('content').innerHTML = render(MD);
+</script>
+</body>
+</html>
