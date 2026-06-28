@@ -54,7 +54,7 @@ $template = @'
 </head>
 <body>
   <div class="topnav">
-    <a href="หน้าแรก.html">🏠 หน้าแรก</a>
+    <a href="__HOME__หน้าแรก.html">🏠 หน้าแรก</a>
     <a href="javascript:scrollTo(0,0)">↑ บนสุด</a>
     <a href="javascript:window.print()">🖨️ พิมพ์/บันทึก PDF</a>
   </div>
@@ -202,7 +202,13 @@ foreach ($f in $mdFiles) {
     $title = ($title -replace '"','')
 
     $mdJson = $ser.Serialize($raw)   # ได้ JS string ที่ปลอดภัย (escape < > & เป็น \uXXXX ด้วย)
-    $page = $template.Replace('__TITLE__', $title).Replace('__MD__', $mdJson)
+
+    # path สัมพัทธ์กลับไปยังโฟลเดอร์ราก (ที่มี หน้าแรก.html) ตามความลึกของไฟล์
+    $relDir = $f.DirectoryName.Substring($root.Length).Trim('\','/')
+    $depth = if ($relDir -eq '') { 0 } else { ($relDir -split '[\\/]').Count }
+    $homePrefix = '../' * $depth
+
+    $page = $template.Replace('__TITLE__', $title).Replace('__MD__', $mdJson).Replace('__HOME__', $homePrefix)
 
     $outPath = [System.IO.Path]::ChangeExtension($f.FullName, '.html')
     $utf8 = New-Object System.Text.UTF8Encoding($false)
